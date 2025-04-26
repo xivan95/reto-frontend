@@ -39,7 +39,7 @@ export class AppComponent {
           name: 'Carlos García',
           email: 'carlos@example.com',
           password: '1234',
-          role: 'user',
+          role: 'empresa',
           experiencia: '2 años como Frontend Developer',
           educacion: 'Grado en Ingeniería Informática',
         },

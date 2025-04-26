@@ -1,28 +1,30 @@
 import { Injectable } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { Usuario } from '../models/usuario.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private usuariosSimulados = [
-    { id: 1, email: 'usuario1@example.com', password: '1234', role: 'user' },
-    { id: 2, email: 'empresa1@example.com', password: '1234', role: 'empresa' },
-    { id: 3, email: 'admin@admin.com', password: '1234', role: 'admin' },
-  ];
-
   login(email: string, password: string) {
-    const usuario = this.usuariosSimulados.find(
+    const usuariosRegistrados = JSON.parse(
+      localStorage.getItem('usuariosRegistrados') || '[]'
+    ) as Usuario[];
+
+    const usuario = usuariosRegistrados.find(
       (u) => u.email === email && u.password === password
     );
 
     if (usuario) {
+      // 🔥 Guardar usuario actual también
+      localStorage.setItem('current_user', JSON.stringify(usuario));
+
       return of({
         token: 'simulated-jwt-token',
         role: usuario.role,
-        id: usuario.id, // ✅ Devuelve también el ID
-      }).pipe(delay(1000));
+        id: usuario.id,
+      }).pipe(delay(500)); // pequeño retraso para simular petición real
     } else {
       return throwError(() => new Error('Usuario o contraseña incorrectos.'));
     }

@@ -4,36 +4,15 @@ import { roleGuard } from './core/guards/role.guard';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
-
 export const routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' as const },
 
-  // 🔐 Login (sin guard)
   {
     path: 'auth/login',
     loadComponent: () =>
       import('./pages/auth/login.component').then((m) => m.LoginComponent),
   },
 
-  // 👤 Usuario
-  {
-    path: 'usuario/home',
-    loadComponent: () =>
-      import('./pages/usuario/home/home.component').then(
-        (m) => m.HomeComponent
-      ),
-    canActivate: [authGuard, roleGuard('user')],
-  },
-  {
-    path: 'usuario/mis-solicitudes',
-    loadComponent: () =>
-      import('./pages/usuario/mis-solicitudes/mis-solicitudes.component').then(
-        (m) => m.MisSolicitudesComponent
-      ),
-    canActivate: [authGuard, roleGuard('user')],
-  },
-
-  // 🏢 Empresa
   {
     path: 'empresa/vacantes',
     loadComponent: () =>
@@ -58,6 +37,15 @@ export const routes = [
       ).then((m) => m.SolicitudesRecibidasComponent),
     canActivate: [authGuard, roleGuard('empresa')],
   },
+
+  {
+    path: 'admin/gestionar-usuarios',
+    loadComponent: () =>
+      import('./pages/admin/home-admin/home-admin.component').then(
+        (m) => m.HomeAdminComponent
+      ),
+    canActivate: [authGuard, roleGuard('admin')],
+  },
   {
     path: 'admin/gestionar-empresas',
     loadComponent: () =>
@@ -73,29 +61,6 @@ export const routes = [
         './pages/admin/gestionar-categorias/gestionar-categorias.component'
       ).then((m) => m.GestionarCategoriasComponent),
     canActivate: [authGuard, roleGuard('admin')],
-  },
-  {
-    path: 'usuario/vacante/:id',
-    loadComponent: () =>
-      import('./pages/usuario/vacante-detalle/vacante-detalle.component').then(
-        (m) => m.VacanteDetalleComponent
-      ),
-    canActivate: [authGuard, roleGuard('user')],
-  },
-  {
-    path: 'admin/gestionar-usuarios',
-    loadComponent: () =>
-      import('./pages/admin/home-admin/home-admin.component').then(
-        (m) => m.HomeAdminComponent
-      ),
-    canActivate: [authGuard, roleGuard('admin')],
-  },
-  {
-    path: 'auth/registro',
-    loadComponent: () =>
-      import('./pages/auth/registro.component').then(
-        (m) => m.RegistroComponent
-      ),
   },
 ];
 

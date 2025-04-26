@@ -1,23 +1,14 @@
 <mat-toolbar color="primary">
   <span class="app-title">Sistema de Vacantes</span>
-
   <span class="spacer"></span>
 
-  <!-- Mostrar nombre del usuario si está logueado -->
-  <ng-container *ngIf="authService.isLoggedIn()">
-    <span class="nombre-usuario">
-      Bienvenido, {{ getNombreUsuario() }}
-    </span>
-
-    <!-- Botones de navegación según rol -->
-    <button *ngIf="authService.getRole() === 'user'" mat-button routerLink="/usuario/home">
-      Inicio Usuario
-    </button>
-
+  <ng-container *ngIf="authService.isLoggedIn$ | async">
+    <!-- Empresa -->
     <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/vacantes">
       Vacantes Empresa
     </button>
 
+    <!-- Admin -->
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-usuarios">
       Gestionar Usuarios
     </button>
@@ -28,14 +19,6 @@
 
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-categorias">
       Gestionar Categorías
-    </button>
-
-    <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/solicitudes-recibidas">
-      Solicitudes Recibidas
-    </button>
-
-    <button *ngIf="authService.getRole() === 'user'" mat-button routerLink="/usuario/mis-solicitudes">
-      Mis Solicitudes
     </button>
 
     <!-- Logout -->
