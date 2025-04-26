@@ -18,7 +18,18 @@
 
     <!-- Admin -->
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-usuarios">
-      Administración
+      Gestionar Usuarios
+    </button>
+    <!-- Admin: Gestionar Empresas -->
+    <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-empresas">
+      Gestionar Empresas
+    </button>
+    <!-- Admin: Gestionar Categorías -->
+    <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-categorias">
+      Gestionar Categorías
+    </button>
+    <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/solicitudes-recibidas">
+      Solicitudes Recibidas
     </button>
 
     <!-- Botón de Logout -->

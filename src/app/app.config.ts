@@ -19,7 +19,9 @@ export const routes = [
   {
     path: 'usuario/home',
     loadComponent: () =>
-      import('./pages/usuario/home/home.component').then((m) => m.HomeComponent),
+      import('./pages/usuario/home/home.component').then(
+        (m) => m.HomeComponent
+      ),
     canActivate: [authGuard, roleGuard('user')],
   },
   {
@@ -43,45 +45,52 @@ export const routes = [
   {
     path: 'empresa/publicar-vacante',
     loadComponent: () =>
-      import('./pages/empresa/publicar-vacante/publicar-vacante.component').then(
-        (m) => m.PublicarVacanteComponent
-      ),
+      import(
+        './pages/empresa/publicar-vacante/publicar-vacante.component'
+      ).then((m) => m.PublicarVacanteComponent),
     canActivate: [authGuard, roleGuard('empresa')],
   },
   {
     path: 'empresa/solicitudes-recibidas',
     loadComponent: () =>
-      import('./pages/empresa/solicitudes-recibidas/solicitudes-recibidas.component').then(
-        (m) => m.SolicitudesRecibidasComponent
-      ),
+      import(
+        './pages/empresa/solicitudes-recibidas/solicitudes-recibidas.component'
+      ).then((m) => m.SolicitudesRecibidasComponent),
     canActivate: [authGuard, roleGuard('empresa')],
-  },
-
-  // 👮 Admin
-  {
-    path: 'admin/gestionar-usuarios',
-    loadComponent: () =>
-      import('./pages/admin/gestionar-usuarios/gestionar-usuarios.component').then(
-        (m) => m.GestionarUsuariosComponent
-      ),
-    canActivate: [authGuard, roleGuard('admin')],
   },
   {
     path: 'admin/gestionar-empresas',
     loadComponent: () =>
-      import('./pages/admin/gestionar-empresas/gestionar-empresas.component').then(
-        (m) => m.GestionarEmpresasComponent
-      ),
+      import(
+        './pages/admin/gestionar-empresas/gestionar-empresas.component'
+      ).then((m) => m.GestionarEmpresasComponent),
     canActivate: [authGuard, roleGuard('admin')],
   },
   {
     path: 'admin/gestionar-categorias',
     loadComponent: () =>
-      import('./pages/admin/gestionar-categorias/gestionar-categorias.component').then(
-        (m) => m.GestionarCategoriasComponent
+      import(
+        './pages/admin/gestionar-categorias/gestionar-categorias.component'
+      ).then((m) => m.GestionarCategoriasComponent),
+    canActivate: [authGuard, roleGuard('admin')],
+  },
+  {
+    path: 'usuario/vacante/:id',
+    loadComponent: () =>
+      import('./pages/usuario/vacante-detalle/vacante-detalle.component').then(
+        (m) => m.VacanteDetalleComponent
+      ),
+    canActivate: [authGuard, roleGuard('user')],
+  },
+  {
+    path: 'admin/gestionar-usuarios',
+    loadComponent: () =>
+      import('./pages/admin/home-admin/home-admin.component').then(
+        (m) => m.HomeAdminComponent
       ),
     canActivate: [authGuard, roleGuard('admin')],
   },
+  
 ];
 
 export const appConfig = {

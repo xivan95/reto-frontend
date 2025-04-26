@@ -1,1 +1,27 @@
-<p>publicar-vacante works!</p>
+<h1>Publicar Nueva Vacante</h1>
+
+<form [formGroup]="form" (ngSubmit)="publicar()" class="vacante-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Título</mat-label>
+    <input matInput formControlName="titulo" placeholder="Ej: Desarrollador Angular">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Ubicación</mat-label>
+    <input matInput formControlName="ubicacion" placeholder="Ej: Madrid, España">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Categoría</mat-label>
+    <input matInput formControlName="categoria" placeholder="Ej: Programación, Diseño, etc.">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput formControlName="descripcion" rows="4" placeholder="Detalles de la vacante..."></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">
+    Publicar Vacante
+  </button>
+</form>

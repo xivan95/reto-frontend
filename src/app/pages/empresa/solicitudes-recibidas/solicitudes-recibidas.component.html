@@ -1,1 +1,25 @@
-<p>solicitudes-recibidas works!</p>
+<h1>Solicitudes Recibidas</h1>
+
+<table mat-table [dataSource]="solicitudes" class="mat-elevation-z8 full-width-table">
+
+  <!-- Nombre -->
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+    <td mat-cell *matCellDef="let solicitud"> {{solicitud.nombre}} </td>
+  </ng-container>
+
+  <!-- Email -->
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let solicitud"> {{solicitud.email}} </td>
+  </ng-container>
+
+  <!-- Vacante -->
+  <ng-container matColumnDef="vacante">
+    <th mat-header-cell *matHeaderCellDef> Vacante </th>
+    <td mat-cell *matCellDef="let solicitud"> {{solicitud.vacante}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['nombre', 'email', 'vacante']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['nombre', 'email', 'vacante'];"></tr>
+</table>

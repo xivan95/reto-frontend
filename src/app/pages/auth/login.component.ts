@@ -57,7 +57,9 @@ export class LoginComponent {
 
     this.apiService.login(email, password).subscribe({
 next: (response: any) => {
-        this.authService.login(response.token, response.role);
+        this.authService.login(response.token, response.role, response.id);
+        localStorage.setItem('current_user_id', response.id.toString());
+
 
         this.snackBar.open('Bienvenido!', 'Cerrar', { duration: 3000 });
 

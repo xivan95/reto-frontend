@@ -10,9 +10,10 @@ export class AuthService {
 
   constructor(private router: Router) {}
 
-  login(token: string, role: 'user' | 'empresa' | 'admin') {
+  login(token: string, role: 'user' | 'empresa' | 'admin', id: number) {
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.ROLE_KEY, role);
+    localStorage.setItem('current_user_id', id.toString()); // ✅ AÑADIR ESTA LÍNEA
   }
 
   logout() {

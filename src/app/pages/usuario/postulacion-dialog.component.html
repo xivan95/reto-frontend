@@ -1,0 +1,23 @@
+<h2>Postularse a la Vacante</h2>
+
+<form [formGroup]="form" (ngSubmit)="enviar()">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombre" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Correo electrónico</mat-label>
+    <input matInput type="email" formControlName="correo" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Comentario</mat-label>
+    <textarea matInput formControlName="comentario" rows="4"></textarea>
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Enviar</button>
+  </div>
+</form>

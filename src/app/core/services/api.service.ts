@@ -6,33 +6,25 @@ import { delay } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor() {}
+  private usuariosSimulados = [
+    { id: 1, email: 'usuario1@example.com', password: '1234', role: 'user' },
+    { id: 2, email: 'empresa1@example.com', password: '1234', role: 'empresa' },
+    { id: 3, email: 'admin@admin.com', password: '1234', role: 'admin' },
+  ];
 
   login(email: string, password: string) {
-    // Simular un pequeño "servidor" que responde al login
+    const usuario = this.usuariosSimulados.find(
+      (u) => u.email === email && u.password === password
+    );
 
-    if (!email || !password) {
-      return throwError(() => new Error('Credenciales inválidas'));
+    if (usuario) {
+      return of({
+        token: 'simulated-jwt-token',
+        role: usuario.role,
+        id: usuario.id, // ✅ Devuelve también el ID
+      }).pipe(delay(1000));
+    } else {
+      return throwError(() => new Error('Usuario o contraseña incorrectos.'));
     }
-
-    if (email === 'admin@email.com') {
-      return of({ token: 'fake-jwt-token-admin', role: 'admin' }).pipe(
-        delay(1000)
-      );
-    }
-
-    if (email === 'empresa@email.com') {
-      return of({ token: 'fake-jwt-token-empresa', role: 'empresa' }).pipe(
-        delay(1000)
-      );
-    }
-
-    if (email.endsWith('@email.com')) {
-      return of({ token: 'fake-jwt-token-user', role: 'user' }).pipe(
-        delay(1000)
-      );
-    }
-
-    return throwError(() => new Error('Usuario no encontrado'));
   }
 }
