@@ -90,7 +90,13 @@ export const routes = [
       ),
     canActivate: [authGuard, roleGuard('admin')],
   },
-  
+  {
+    path: 'auth/registro',
+    loadComponent: () =>
+      import('./pages/auth/registro.component').then(
+        (m) => m.RegistroComponent
+      ),
+  },
 ];
 
 export const appConfig = {

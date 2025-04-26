@@ -28,21 +28,18 @@ import { Usuario } from '../../../core/models/usuario.model';
   styleUrls: ['./home-admin.component.scss'],
 })
 export class HomeAdminComponent {
-  constructor(
-    private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) {}
-
   rolesDisponibles = ['user', 'empresa', 'admin'];
-  mostrarFormularioUsuario: boolean = false;
-
+  mostrarFormularioUsuario = false;
   editarUsuario: Usuario | null = null;
 
   nuevoUsuario: Usuario = {
     id: 0,
     name: '',
     email: '',
+    password: '',
     role: 'user',
+    experiencia: '',
+    educacion: '',
   };
 
   usuarios: Usuario[] = [
@@ -50,21 +47,35 @@ export class HomeAdminComponent {
       id: 1,
       name: 'Carlos García',
       email: 'carlos@example.com',
+      password: '1234',
       role: 'user',
+      experiencia: '2 años como Desarrollador Frontend',
+      educacion: 'Grado en Ingeniería Informática',
     },
     {
       id: 2,
       name: 'Laura Fernández',
       email: 'laura@example.com',
+      password: '1234',
       role: 'empresa',
+      experiencia: 'CEO de DataSolutions',
+      educacion: 'MBA en Dirección de Empresas',
     },
     {
       id: 3,
       name: 'Admin Principal',
       email: 'admin@admin.com',
+      password: 'admin123',
       role: 'admin',
+      experiencia: '5 años como Administrador de Sistemas',
+      educacion: 'Máster en Ciberseguridad',
     },
   ];
+
+  constructor(
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   crearUsuario() {
     if (!this.nuevoUsuario.name.trim() || !this.nuevoUsuario.email.trim()) {
@@ -75,7 +86,7 @@ export class HomeAdminComponent {
     }
 
     if (this.editarUsuario) {
-      // Estamos editando
+      // Editando
       const index = this.usuarios.findIndex(
         (u) => u.id === this.editarUsuario!.id
       );
@@ -91,7 +102,10 @@ export class HomeAdminComponent {
         id: Date.now(),
         name: this.nuevoUsuario.name.trim(),
         email: this.nuevoUsuario.email.trim(),
+        password: this.nuevoUsuario.password.trim(),
         role: this.nuevoUsuario.role,
+        experiencia: this.nuevoUsuario.experiencia.trim(),
+        educacion: this.nuevoUsuario.educacion.trim(),
       };
       this.usuarios.push(nuevo);
       this.snackBar.open('Usuario creado exitosamente.', 'Cerrar', {
@@ -100,15 +114,11 @@ export class HomeAdminComponent {
     }
 
     this.usuarios = [...this.usuarios];
-    this.nuevoUsuario = { id: 0, name: '', email: '', role: 'user' };
-    this.editarUsuario = null;
-    this.mostrarFormularioUsuario = false;
+    this.resetFormulario();
   }
 
   cancelarFormularioUsuario() {
-    this.nuevoUsuario = { id: 0, name: '', email: '', role: 'user' };
-    this.editarUsuario = null;
-    this.mostrarFormularioUsuario = false;
+    this.resetFormulario();
   }
 
   abrirFormularioEditar(usuario: Usuario) {
@@ -142,5 +152,19 @@ export class HomeAdminComponent {
     this.snackBar.open('Usuario eliminado correctamente.', 'Cerrar', {
       duration: 3000,
     });
+  }
+
+  private resetFormulario() {
+    this.nuevoUsuario = {
+      id: 0,
+      name: '',
+      email: '',
+      password: '',
+      role: 'user',
+      experiencia: '',
+      educacion: '',
+    };
+    this.editarUsuario = null;
+    this.mostrarFormularioUsuario = false;
   }
 }

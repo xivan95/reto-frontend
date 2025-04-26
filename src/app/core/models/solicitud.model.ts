@@ -3,4 +3,5 @@ export interface Solicitud {
   nombre: string;
   email: string;
   vacante: string;
+  estado: 'Pendiente' | 'Adjudicada' | 'Rechazada';
 }

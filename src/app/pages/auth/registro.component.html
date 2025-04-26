@@ -1,0 +1,41 @@
+<div class="registro-container">
+  <mat-card>
+    <h1>Registro de Usuario</h1>
+
+    <form [formGroup]="form" (ngSubmit)="registrar()">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Experiencia Laboral</mat-label>
+        <textarea matInput formControlName="experiencia" rows="3"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Educación</mat-label>
+        <textarea matInput formControlName="educacion" rows="3"></textarea>
+      </mat-form-field>
+
+      <div class="botones">
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+          Registrarse
+        </button>
+        <button mat-stroked-button color="accent" routerLink="/auth/login">
+          Volver al Login
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

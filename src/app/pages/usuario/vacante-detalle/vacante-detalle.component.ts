@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { Vacante } from '../../../core/models/vacante.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Vacante } from '../../../core/models/vacante.model';
+import { Solicitud } from '../../../core/models/solicitud.model';
 import { PostulacionDialogComponent } from '../postulacion-dialog.component';
-import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-vacante-detalle',
@@ -24,26 +23,38 @@ export class VacanteDetalleComponent {
     {
       id: 1,
       titulo: 'Desarrollador Frontend Angular',
-      empresa: 'Tech Solutions',
+      descripcion: 'Desarrollo de aplicaciones modernas en Angular 16+.',
+      requisitos:
+        'Experiencia previa en Angular 14+, RxJS y buenas prácticas de desarrollo.',
       ubicacion: 'Madrid, España',
-      descripcion:
-        'Desarrollo de interfaces modernas en Angular 16+, colaboración con equipos de backend y UX/UI.',
+      empresa: 'Tech Solutions',
+      estado: 'CREADA',
+      tipoContrato: 'Tiempo Completo',
+      categoria: 'Programación',
     },
     {
       id: 2,
       titulo: 'Analista de Datos',
-      empresa: 'DataCorp',
-      ubicacion: 'Barcelona, España',
       descripcion:
-        'Análisis de grandes volúmenes de datos, creación de dashboards y generación de reportes estratégicos.',
+        'Análisis de grandes volúmenes de datos y creación de dashboards.',
+      requisitos: 'Conocimientos en SQL, Power BI, Tableau.',
+      ubicacion: 'Barcelona, España',
+      empresa: 'DataCorp',
+      estado: 'CREADA',
+      tipoContrato: 'Medio Tiempo',
+      categoria: 'Datos',
     },
     {
       id: 3,
       titulo: 'Ingeniero de Software',
-      empresa: 'Innovatech',
-      ubicacion: 'Valencia, España',
       descripcion:
-        'Participación en proyectos innovadores de inteligencia artificial y machine learning, desarrollo de soluciones escalables.',
+        'Desarrollo de sistemas de IA y soluciones cloud escalables.',
+      requisitos: 'Experiencia en Python, AWS y arquitecturas distribuidas.',
+      ubicacion: 'Valencia, España',
+      empresa: 'Innovatech',
+      estado: 'CREADA',
+      tipoContrato: 'Freelance',
+      categoria: 'Programación',
     },
   ];
 
@@ -66,12 +77,23 @@ export class VacanteDetalleComponent {
       if (result && this.vacante) {
         console.log('Postulación:', result);
 
-        // 🔥 Guardar ID de vacante en localStorage
-        const postulaciones = JSON.parse(
-          localStorage.getItem('postulaciones') || '[]'
+        const nuevasSolicitudes: Solicitud[] = JSON.parse(
+          localStorage.getItem('misSolicitudes') || '[]'
         );
-        postulaciones.push(this.vacante.id);
-        localStorage.setItem('postulaciones', JSON.stringify(postulaciones));
+
+        const nuevaSolicitud: Solicitud = {
+          id: Date.now(),
+          nombre: result.nombre,
+          email: result.email,
+          vacante: this.vacante.titulo,
+          estado: 'Pendiente',
+        };
+
+        nuevasSolicitudes.push(nuevaSolicitud);
+        localStorage.setItem(
+          'misSolicitudes',
+          JSON.stringify(nuevasSolicitudes)
+        );
 
         this.snackBar.open('¡Postulación enviada exitosamente!', 'Cerrar', {
           duration: 3000,

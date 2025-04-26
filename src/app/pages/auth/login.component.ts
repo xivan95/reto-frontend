@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AuthService } from '../../core/services/auth.service';
-import { ApiService } from '../../core/services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -28,18 +31,16 @@ import { ApiService } from '../../core/services/api.service';
 })
 export class LoginComponent {
   form: FormGroup;
-  loading: boolean = false; // ✅ Para el spinner
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService,
-    private apiService: ApiService,
     private snackBar: MatSnackBar
   ) {
     this.form = this.fb.group({
-      email: [''],
-      password: [''],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     });
   }
 
@@ -53,32 +54,38 @@ export class LoginComponent {
       return;
     }
 
-    this.loading = true; // ✅ Mostrar spinner
+    const usuarios = JSON.parse(
+      localStorage.getItem('usuariosRegistrados') || '[]'
+    );
+    const usuarioEncontrado = usuarios.find(
+      (u: any) => u.email === email && u.password === password
+    );
 
-    this.apiService.login(email, password).subscribe({
-next: (response: any) => {
-        this.authService.login(response.token, response.role, response.id);
-        localStorage.setItem('current_user_id', response.id.toString());
-
-
-        this.snackBar.open('Bienvenido!', 'Cerrar', { duration: 3000 });
-
-        if (response.role === 'admin') {
-          this.router.navigate(['/admin/gestionar-usuarios']);
-        } else if (response.role === 'empresa') {
-          this.router.navigate(['/empresa/vacantes']);
-        } else {
-          this.router.navigate(['/usuario/home']);
+    if (!usuarioEncontrado) {
+      this.snackBar.open(
+        'Usuario no encontrado o credenciales incorrectas.',
+        'Cerrar',
+        {
+          duration: 3000,
         }
-      },
-      error: (error) => {
-        this.snackBar.open(
-          error.message || 'Error de autenticación',
-          'Cerrar',
-          { duration: 3000 }
-        );
-        this.loading = false; // ✅ Ocultar spinner
-      },
-    });
+      );
+      return;
+    }
+
+    // 🔥 Guardamos los datos completos del usuario actual
+    localStorage.setItem('current_user', JSON.stringify(usuarioEncontrado));
+    localStorage.setItem('auth_token', 'fake-jwt-token');
+    localStorage.setItem('auth_role', usuarioEncontrado.role);
+    localStorage.setItem('current_user_id', usuarioEncontrado.id.toString());
+
+    this.snackBar.open('Bienvenido!', 'Cerrar', { duration: 3000 });
+
+    if (usuarioEncontrado.role === 'admin') {
+      this.router.navigate(['/admin/gestionar-usuarios']);
+    } else if (usuarioEncontrado.role === 'empresa') {
+      this.router.navigate(['/empresa/vacantes']);
+    } else {
+      this.router.navigate(['/usuario/home']);
+    }
   }
 }

@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -25,27 +20,42 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./postulacion-dialog.component.scss'],
 })
 export class PostulacionDialogComponent {
-  form: FormGroup;
+  nombre: string = '';
+  email: string = '';
+  cvFile: File | null = null;
+  cvBase64: string | null = null;
 
-  constructor(
-    private dialogRef: MatDialogRef<PostulacionDialogComponent>,
-    private fb: FormBuilder
-  ) {
-    this.form = this.fb.group({
-      nombre: ['', Validators.required],
-      correo: ['', [Validators.required, Validators.email]],
-      comentario: [''],
-    });
-  }
+  constructor(private dialogRef: MatDialogRef<PostulacionDialogComponent>) {}
 
-  enviar() {
-    if (this.form.valid) {
-      console.log('Postulación enviada:', this.form.value);
-      this.dialogRef.close(this.form.value);
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.cvFile = file;
+
+      // Convertir a base64 para simular almacenamiento (ya que no tenemos backend)
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.cvBase64 = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
+  enviarPostulacion() {
+    if (!this.nombre.trim() || !this.email.trim() || !this.cvBase64) {
+      alert('Por favor, completa todos los campos y adjunta tu CV.');
+      return;
+    }
+
+    // Retornamos los datos de postulación
+    this.dialogRef.close({
+      nombre: this.nombre,
+      email: this.email,
+      cvBase64: this.cvBase64,
+    });
+  }
+
   cancelar() {
-    this.dialogRef.close();
+    this.dialogRef.close(null);
   }
 }

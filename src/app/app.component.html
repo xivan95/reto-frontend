@@ -3,38 +3,43 @@
 
   <span class="spacer"></span>
 
-  <!-- Mostrar solo si está logueado -->
+  <!-- Mostrar nombre del usuario si está logueado -->
   <ng-container *ngIf="authService.isLoggedIn()">
+    <span class="nombre-usuario">
+      Bienvenido, {{ getNombreUsuario() }}
+    </span>
 
-    <!-- Usuario -->
+    <!-- Botones de navegación según rol -->
     <button *ngIf="authService.getRole() === 'user'" mat-button routerLink="/usuario/home">
       Inicio Usuario
     </button>
 
-    <!-- Empresa -->
     <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/vacantes">
       Vacantes Empresa
     </button>
 
-    <!-- Admin -->
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-usuarios">
       Gestionar Usuarios
     </button>
-    <!-- Admin: Gestionar Empresas -->
+
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-empresas">
       Gestionar Empresas
     </button>
-    <!-- Admin: Gestionar Categorías -->
+
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-categorias">
       Gestionar Categorías
     </button>
+
     <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/solicitudes-recibidas">
       Solicitudes Recibidas
     </button>
 
-    <!-- Botón de Logout -->
-    <button mat-button (click)="logout()">Logout</button>
+    <button *ngIf="authService.getRole() === 'user'" mat-button routerLink="/usuario/mis-solicitudes">
+      Mis Solicitudes
+    </button>
 
+    <!-- Logout -->
+    <button mat-button (click)="logout()">Logout</button>
   </ng-container>
 </mat-toolbar>
 

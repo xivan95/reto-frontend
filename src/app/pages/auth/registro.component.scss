@@ -1,6 +1,6 @@
-/* login.component.scss */
+/* registro.component.scss */
 
-.login-container {
+.registro-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@
 
 mat-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   padding: 32px;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -32,22 +32,6 @@ mat-form-field {
 
 .botones {
   display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.registro-link {
-  text-align: center;
+  justify-content: space-between;
   margin-top: 24px;
-  font-size: 0.95rem;
-}
-
-.registro-link a {
-  color: #3f51b5;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.registro-link a:hover {
-  text-decoration: underline;
 }
