@@ -1,50 +1,65 @@
 <h1>Detalle de Vacante</h1>
 
-<mat-card *ngIf="vacante">
+<mat-card *ngIf="vacante" class="vacante-card">
   <mat-card-title>{{ vacante.titulo }}</mat-card-title>
-  <mat-card-subtitle>{{ vacante.ubicacion }} - {{ vacante.categoria }}</mat-card-subtitle>
+  <mat-card-subtitle>{{ vacante.ubicacion }} - {{ vacante.empresa }}</mat-card-subtitle>
   <mat-card-content>
     <p><strong>Descripción:</strong> {{ vacante.descripcion }}</p>
     <p><strong>Requisitos:</strong> {{ vacante.requisitos }}</p>
+    <p><strong>Categoría:</strong> {{ vacante.categoria }}</p>
+    <p><strong>Tipo de Contrato:</strong> {{ vacante.tipoContrato }}</p>
     <p><strong>Estado:</strong> {{ vacante.estado }}</p>
   </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="accent" routerLink="/empresa/vacantes">
+      Volver
+    </button>
+  </mat-card-actions>
 </mat-card>
 
-<h2>Solicitudes Recibidas</h2>
+<!-- Solicitudes recibidas -->
+<div *ngIf="solicitudes.length > 0" class="solicitudes-container">
+  <h2>Solicitudes Recibidas</h2>
 
-<table mat-table [dataSource]="solicitudes" class="mat-elevation-z8 full-width-table">
+  <table mat-table [dataSource]="solicitudes" class="mat-elevation-z8 full-width-table">
+    
+    <!-- Nombre -->
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let solicitud"> {{ solicitud.nombre }} </td>
+    </ng-container>
 
-  <!-- Nombre -->
-  <ng-container matColumnDef="nombre">
-    <th mat-header-cell *matHeaderCellDef> Nombre </th>
-    <td mat-cell *matCellDef="let solicitud"> {{ solicitud.nombre }} </td>
-  </ng-container>
+    <!-- Email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let solicitud"> {{ solicitud.email }} </td>
+    </ng-container>
 
-  <!-- Email -->
-  <ng-container matColumnDef="email">
-    <th mat-header-cell *matHeaderCellDef> Email </th>
-    <td mat-cell *matCellDef="let solicitud"> {{ solicitud.email }} </td>
-  </ng-container>
+    <!-- Estado -->
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef> Estado </th>
+      <td mat-cell *matCellDef="let solicitud"> {{ solicitud.estado }} </td>
+    </ng-container>
 
-  <!-- Estado -->
-  <ng-container matColumnDef="estado">
-    <th mat-header-cell *matHeaderCellDef> Estado </th>
-    <td mat-cell *matCellDef="let solicitud"> {{ solicitud.estado }} </td>
-  </ng-container>
+    <!-- Acciones -->
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let solicitud">
+        <button mat-button color="primary" (click)="asignarSolicitud(solicitud.id)">
+          Asignar
+        </button>
+        <button mat-button color="warn" (click)="cancelarSolicitud(solicitud.id)">
+          Cancelar
+        </button>
+      </td>
+    </ng-container>
 
-  <!-- Acciones -->
-  <ng-container matColumnDef="acciones">
-    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-    <td mat-cell *matCellDef="let solicitud">
-      <button mat-button color="primary" (click)="asignarVacante(solicitud.id)">
-        Asignar
-      </button>
-      <button mat-button color="warn" (click)="cancelarSolicitud(solicitud.id)">
-        Cancelar
-      </button>
-    </td>
-  </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['nombre', 'email', 'estado', 'acciones']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['nombre', 'email', 'estado', 'acciones'];"></tr>
+  </table>
+</div>
 
-  <tr mat-header-row *matHeaderRowDef="['nombre', 'email', 'estado', 'acciones']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['nombre', 'email', 'estado', 'acciones'];"></tr>
-</table>
+<div *ngIf="solicitudes.length === 0" class="no-solicitudes">
+  <p>No hay solicitudes para esta vacante.</p>
+</div>
