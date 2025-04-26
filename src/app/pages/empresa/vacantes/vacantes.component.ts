@@ -24,7 +24,6 @@ import { Vacante } from '../../../core/models/vacante.model';
   styleUrls: ['./vacantes.component.scss'],
 })
 export class VacantesComponent implements OnInit {
-  // 🛠️ implements OnInit
   vacantes: Vacante[] = [];
 
   constructor(
@@ -33,14 +32,19 @@ export class VacantesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // ✅ Ahora sí se ejecuta
-    this.vacantes = this.vacantesService.getVacantes();
+    this.cargarVacantes();
   }
 
-  eliminarVacante(id: number) {
-    this.vacantesService.eliminarVacante(id);
-    this.vacantes = this.vacantesService.getVacantes();
-    this.snackBar.open('Vacante eliminada correctamente.', 'Cerrar', {
+  cargarVacantes() {
+    this.vacantes = this.vacantesService
+      .getVacantes()
+      .filter((v) => v.estado !== 'CANCELADA');
+  }
+
+  cancelarVacante(id: number) {
+    this.vacantesService.cancelarVacante(id);
+    this.cargarVacantes(); // 🔥 Recargamos vacantes filtradas
+    this.snackBar.open('Vacante cancelada correctamente.', 'Cerrar', {
       duration: 3000,
     });
   }

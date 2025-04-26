@@ -2,6 +2,6 @@ export interface Solicitud {
   id: number;
   nombre: string;
   email: string;
-  vacante: string;
-  estado: 'Pendiente' | 'Adjudicada' | 'Rechazada';
+  vacanteId: number; // 👈 importante cambio
+  estado: 'pendiente' | 'adjudicada' | 'cancelada';
 }

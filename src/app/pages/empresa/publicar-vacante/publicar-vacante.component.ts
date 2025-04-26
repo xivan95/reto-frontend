@@ -1,3 +1,4 @@
+// src/app/pages/empresa/publicar-vacante/publicar-vacante.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -10,10 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { VacantesService } from '../../../core/services/vacantes.service';
-import { Vacante } from '../../../core/models/vacante.model';
-
 
 @Component({
   selector: 'app-publicar-vacante',
@@ -24,7 +23,6 @@ import { Vacante } from '../../../core/models/vacante.model';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    RouterModule,
   ],
   templateUrl: './publicar-vacante.component.html',
   styleUrls: ['./publicar-vacante.component.scss'],
@@ -54,8 +52,7 @@ export class PublicarVacanteComponent {
       return;
     }
 
-    const nuevaVacante = this.form.value as Vacante;
-
+    const nuevaVacante = this.form.value;
     this.vacantesService.agregarVacante(nuevaVacante);
 
     this.snackBar.open('Vacante publicada exitosamente.', 'Cerrar', {
