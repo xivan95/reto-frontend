@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -38,8 +43,8 @@ export class LoginComponent {
     private snackBar: MatSnackBar
   ) {
     this.form = this.fb.group({
-      email: [''],
-      password: [''],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
@@ -57,22 +62,21 @@ export class LoginComponent {
 
     this.apiService.login(email, password).subscribe({
       next: (response: any) => {
-        this.authService.login(response.token, response.role, response.id);
+        this.authService.login(response.token, response.role, response.user);
 
         this.snackBar.open('¡Bienvenido!', 'Cerrar', { duration: 3000 });
 
-        // 🔥 Después de guardar login, redirigimos bien
-        if (response.role === 'empresa') {
-          this.router.navigate(['/empresa/vacantes']);
-        } else if (response.role === 'admin') {
+        if (response.role === 'admin') {
           this.router.navigate(['/admin/gestionar-usuarios']);
+        } else if (response.role === 'empresa') {
+          this.router.navigate(['/empresa/vacantes']);
         } else {
-          this.router.navigate(['/auth/login']); // fallback por si acaso
+          this.router.navigate(['/auth/login']);
         }
       },
       error: (error) => {
         this.snackBar.open(
-          error.message || 'Error de autenticación.',
+          error.message || 'Error de autenticación',
           'Cerrar',
           { duration: 3000 }
         );

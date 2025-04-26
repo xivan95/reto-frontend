@@ -8,23 +8,20 @@ import { Usuario } from '../models/usuario.model';
 })
 export class ApiService {
   login(email: string, password: string) {
-    const usuariosRegistrados = JSON.parse(
+    const usuarios = JSON.parse(
       localStorage.getItem('usuariosRegistrados') || '[]'
     ) as Usuario[];
 
-    const usuario = usuariosRegistrados.find(
+    const usuario = usuarios.find(
       (u) => u.email === email && u.password === password
     );
 
     if (usuario) {
-      // 🔥 Guardar usuario actual también
-      localStorage.setItem('current_user', JSON.stringify(usuario));
-
       return of({
         token: 'simulated-jwt-token',
         role: usuario.role,
-        id: usuario.id,
-      }).pipe(delay(500)); // pequeño retraso para simular petición real
+        user: usuario,
+      }).pipe(delay(500));
     } else {
       return throwError(() => new Error('Usuario o contraseña incorrectos.'));
     }

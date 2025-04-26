@@ -2,13 +2,11 @@
   <span class="app-title">Sistema de Vacantes</span>
   <span class="spacer"></span>
 
-  <ng-container *ngIf="authService.isLoggedIn$ | async">
-    <!-- Empresa -->
+  <ng-container *ngIf="authService.isLoggedIn()">
     <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/vacantes">
       Vacantes Empresa
     </button>
 
-    <!-- Admin -->
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-usuarios">
       Gestionar Usuarios
     </button>
@@ -21,7 +19,6 @@
       Gestionar Categorías
     </button>
 
-    <!-- Logout -->
     <button mat-button (click)="logout()">Logout</button>
   </ng-container>
 </mat-toolbar>
