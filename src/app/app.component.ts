@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -10,11 +10,17 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule, MatToolbarModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterModule,
+    MatToolbarModule,
+    MatButtonModule,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'reto-frontend';
 
   constructor(public authService: AuthService, private router: Router) {
@@ -23,6 +29,12 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  ngOnInit() {
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+    }
   }
 
   getNombreUsuario(): string {

@@ -1,19 +1,21 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core'; // 👈 Agregar OnInit
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+import { ApiService } from '../../core/services/api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AuthService } from '../../core/services/auth.service';
-import { ApiService } from '../../core/services/api.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +33,8 @@ import { ApiService } from '../../core/services/api.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  // 👈 implements OnInit
   form: FormGroup;
   loading = false;
 
@@ -46,6 +49,17 @@ export class LoginComponent {
       email: ['', Validators.required],
       password: ['', Validators.required],
     });
+  }
+
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      const role = this.authService.getRole();
+      if (role === 'admin') {
+        this.router.navigate(['/admin/gestionar-usuarios']);
+      } else if (role === 'empresa') {
+        this.router.navigate(['/empresa/vacantes']);
+      }
+    }
   }
 
   login() {

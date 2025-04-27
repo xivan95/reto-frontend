@@ -1,0 +1,13 @@
+<h2 class="titulo-dialogo">{{ data.titulo }}</h2>
+
+<mat-dialog-content class="contenido-dialogo">
+  <mat-form-field appearance="outline" class="campo-formulario">
+    <mat-label>Comentario</mat-label>
+    <textarea matInput [(ngModel)]="comentario" rows="4" placeholder="Escribe tu comentario..."></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="acciones-dialogo" align="center">
+  <button mat-stroked-button color="primary" (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="enviar()">Enviar</button>
+</mat-dialog-actions>

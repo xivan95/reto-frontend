@@ -1,6 +1,6 @@
-<h1>Publicar Nueva Vacante</h1>
+<h1>Editar Vacante</h1>
 
-<form [formGroup]="form" (ngSubmit)="publicar()" class="vacante-form">
+<form [formGroup]="form" (ngSubmit)="guardarCambios()" class="vacante-form">
   <mat-form-field appearance="outline">
     <mat-label>Título</mat-label>
     <input matInput formControlName="titulo" placeholder="Ej: Desarrollador Angular">
@@ -22,18 +22,18 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-  <mat-label>Requisitos</mat-label>
-  <input matInput formControlName="requisitos" placeholder="Ej: Experiencia en Angular, RxJS, etc.">
-</mat-form-field>
+    <mat-label>Requisitos</mat-label>
+    <input matInput formControlName="requisitos" placeholder="Ej: Experiencia en Angular, RxJS">
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Tipo de Contrato</mat-label>
-  <input matInput formControlName="tipoContrato" placeholder="Ej: Tiempo Completo, Freelance, etc.">
-</mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Tipo de Contrato</mat-label>
+    <input matInput formControlName="tipoContrato" placeholder="Ej: Tiempo Completo, Freelance...">
+  </mat-form-field>
 
   <div class="botones">
     <button mat-raised-button color="primary" type="submit">
-      Publicar Vacante
+      Guardar Cambios
     </button>
 
     <button mat-button color="accent" type="button" (click)="volver()">

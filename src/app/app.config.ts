@@ -62,6 +62,14 @@ export const routes = [
       ),
     canActivate: [authGuard, roleGuard('empresa')],
   },
+  {
+    path: 'empresa/editar-vacante/:id',
+    loadComponent: () =>
+      import('./shared/vacante-editar/vacante-editar.component').then(
+        (m) => m.VacanteEditarComponent
+      ),
+    canActivate: [authGuard, roleGuard('empresa')],
+  },
 ];
 
 export const appConfig = {

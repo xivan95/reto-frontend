@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.titulo-dialogo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.contenido-dialogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.campo-formulario {
+  width: 100%;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+.acciones-dialogo {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+button {
+  min-width: 120px;
+}

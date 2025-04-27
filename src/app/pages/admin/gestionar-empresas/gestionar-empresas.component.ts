@@ -8,6 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component'; // Ajusta la ruta si es necesario
+
 
 @Component({
   selector: 'app-gestionar-empresas',
@@ -40,7 +43,8 @@ export class GestionarEmpresasComponent {
 
   constructor(
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   crearEmpresa() {
@@ -78,9 +82,17 @@ export class GestionarEmpresasComponent {
   }
 
   eliminarEmpresa(id: number) {
-    this.empresas = this.empresas.filter((e) => e.id !== id);
-    this.snackBar.open('Empresa eliminada correctamente.', 'Cerrar', {
-      duration: 3000,
+    const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
+      data: { mensaje: '¿Estás seguro que deseas eliminar esta empresa?' },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmado) => {
+      if (confirmado) {
+        this.empresas = this.empresas.filter((e) => e.id !== id);
+        this.snackBar.open('Empresa eliminada correctamente.', 'Cerrar', {
+          duration: 3000,
+        });
+      }
     });
   }
 

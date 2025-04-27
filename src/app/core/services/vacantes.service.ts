@@ -81,7 +81,7 @@ export class VacantesService {
     this.solicitudes.push({ ...solicitud });
   }
 
-  asignarVacante(vacanteId: number, solicitudId: number) {
+  asignarVacante(vacanteId: number, solicitudId: number, comentario: string) {
     const solicitud = this.solicitudes.find(
       (s) => s.id === solicitudId && s.vacanteId === vacanteId
     );
@@ -90,19 +90,24 @@ export class VacantesService {
     if (solicitud && vacante) {
       vacante.estado = 'ASIGNADA';
       solicitud.estado = 'adjudicada';
+      solicitud.comentario = comentario; // 🔥 Guardar comentario
     }
   }
 
-  cancelarSolicitud(vacanteId: number, solicitudId: number) {
+  cancelarSolicitud(
+    vacanteId: number,
+    solicitudId: number,
+    comentario: string
+  ) {
     const solicitud = this.solicitudes.find(
       (s) => s.id === solicitudId && s.vacanteId === vacanteId
     );
     if (solicitud) {
       solicitud.estado = 'cancelada';
+      solicitud.comentario = comentario; // 🔥 Guardar comentario
     }
   }
 
-  // 🔥 Simular solicitudes de ejemplo
   private simularSolicitudes() {
     this.solicitudes = [
       {
@@ -110,21 +115,27 @@ export class VacantesService {
         nombre: 'Carlos García',
         email: 'carlos@example.com',
         estado: 'pendiente',
-        vacanteId: 1, // Asociada a la vacante de Desarrollador Angular
+        vacanteId: 1,
+        cvUrl: 'https://example.com/cv-carlos.pdf',
+        fecha: '2025-04-25', // 🔥 Nueva fecha
       },
       {
         id: 102,
         nombre: 'Laura Fernández',
         email: 'laura@example.com',
         estado: 'pendiente',
-        vacanteId: 1, // También asociada a la misma vacante
+        vacanteId: 1,
+        cvUrl: 'https://example.com/cv-laura.pdf',
+        fecha: '2025-04-25', // 🔥 Nueva fecha
       },
       {
         id: 103,
         nombre: 'Miguel Ruiz',
         email: 'miguel@example.com',
         estado: 'pendiente',
-        vacanteId: 2, // Esta solicitud va a la vacante de Diseñador UX/UI
+        vacanteId: 2,
+        cvUrl: 'https://example.com/cv-miguel.pdf',
+        fecha: '2025-04-26', // 🔥 Nueva fecha
       },
     ];
   }

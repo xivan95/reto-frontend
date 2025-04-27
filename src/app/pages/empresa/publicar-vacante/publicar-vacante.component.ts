@@ -36,12 +36,14 @@ export class PublicarVacanteComponent {
     private router: Router,
     private vacantesService: VacantesService
   ) {
-    this.form = this.fb.group({
-      titulo: ['', Validators.required],
-      ubicacion: ['', Validators.required],
-      categoria: ['', Validators.required],
-      descripcion: ['', Validators.required],
-    });
+      this.form = this.fb.group({
+        titulo: ['', Validators.required],
+        ubicacion: ['', Validators.required],
+        categoria: ['', Validators.required],
+        descripcion: ['', Validators.required],
+        requisitos: ['', Validators.required], // 🔥 Nuevo campo
+        tipoContrato: ['', Validators.required], // 🔥 Opcional, si quieres
+      });
   }
 
   publicar() {
@@ -59,6 +61,10 @@ export class PublicarVacanteComponent {
       duration: 3000,
     });
 
+    this.router.navigate(['/empresa/vacantes']);
+  }
+
+  volver() {
     this.router.navigate(['/empresa/vacantes']);
   }
 }

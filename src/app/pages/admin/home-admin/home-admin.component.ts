@@ -10,6 +10,9 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Usuario } from '../../../core/models/usuario.model';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component'; // Asegúrate que esté bien la ruta
+
 
 @Component({
   selector: 'app-home-admin',
@@ -23,6 +26,7 @@ import { Usuario } from '../../../core/models/usuario.model';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDialogModule,
   ],
   templateUrl: './home-admin.component.html',
   styleUrls: ['./home-admin.component.scss'],
@@ -74,7 +78,8 @@ export class HomeAdminComponent {
 
   constructor(
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   crearUsuario() {
@@ -128,29 +133,38 @@ export class HomeAdminComponent {
   }
 
   eliminarUsuario(usuarioId: number) {
-    const currentUserIdStr = localStorage.getItem('current_user_id');
+    const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
+      data: { mensaje: '¿Estás seguro que deseas eliminar este usuario?' },
+    });
 
-    if (!currentUserIdStr) {
-      this.snackBar.open(
-        'Error: No se encontró ID del usuario actual.',
-        'Cerrar',
-        { duration: 3000 }
-      );
-      return;
-    }
+    dialogRef.afterClosed().subscribe((confirmado) => {
+      if (confirmado) {
+        const currentUserStr = localStorage.getItem('current_user');
+        const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
 
-    const currentUserId = Number(currentUserIdStr);
+        if (!currentUser) {
+          this.snackBar.open(
+            'Error: No se encontró el usuario actual.',
+            'Cerrar',
+            {
+              duration: 3000,
+            }
+          );
+          return;
+        }
 
-    if (usuarioId === currentUserId) {
-      this.snackBar.open('No puedes eliminar tu propia cuenta.', 'Cerrar', {
-        duration: 3000,
-      });
-      return;
-    }
+        if (usuarioId === currentUser.id) {
+          this.snackBar.open('No puedes eliminar tu propia cuenta.', 'Cerrar', {
+            duration: 3000,
+          });
+          return;
+        }
 
-    this.usuarios = this.usuarios.filter((u) => u.id !== usuarioId);
-    this.snackBar.open('Usuario eliminado correctamente.', 'Cerrar', {
-      duration: 3000,
+        this.usuarios = this.usuarios.filter((u) => u.id !== usuarioId);
+        this.snackBar.open('Usuario eliminado correctamente.', 'Cerrar', {
+          duration: 3000,
+        });
+      }
     });
   }
 
