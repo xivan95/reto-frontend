@@ -34,7 +34,7 @@ export class VacantesService {
   private solicitudes: Solicitud[] = [];
 
   constructor() {
-    this.simularSolicitudes(); // ⚡ Iniciar solicitudes de prueba
+    this.simularSolicitudes();
   }
 
   getVacantes(): Vacante[] {
@@ -90,7 +90,7 @@ export class VacantesService {
     if (solicitud && vacante) {
       vacante.estado = 'ASIGNADA';
       solicitud.estado = 'adjudicada';
-      solicitud.comentario = comentario; // 🔥 Guardar comentario
+      solicitud.comentario = comentario; 
     }
   }
 
@@ -104,7 +104,7 @@ export class VacantesService {
     );
     if (solicitud) {
       solicitud.estado = 'cancelada';
-      solicitud.comentario = comentario; // 🔥 Guardar comentario
+      solicitud.comentario = comentario; 
     }
   }
 
@@ -117,7 +117,7 @@ export class VacantesService {
         estado: 'pendiente',
         vacanteId: 1,
         cvUrl: 'https://example.com/cv-carlos.pdf',
-        fecha: '2025-04-25', // 🔥 Nueva fecha
+        fecha: '2025-04-25', 
       },
       {
         id: 102,
@@ -126,7 +126,7 @@ export class VacantesService {
         estado: 'pendiente',
         vacanteId: 1,
         cvUrl: 'https://example.com/cv-laura.pdf',
-        fecha: '2025-04-25', // 🔥 Nueva fecha
+        fecha: '2025-04-25', 
       },
       {
         id: 103,
@@ -135,7 +135,7 @@ export class VacantesService {
         estado: 'pendiente',
         vacanteId: 2,
         cvUrl: 'https://example.com/cv-miguel.pdf',
-        fecha: '2025-04-26', // 🔥 Nueva fecha
+        fecha: '2025-04-26', 
       },
     ];
   }

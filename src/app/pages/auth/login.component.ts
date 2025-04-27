@@ -34,7 +34,6 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  // 👈 implements OnInit
   form: FormGroup;
   loading = false;
 

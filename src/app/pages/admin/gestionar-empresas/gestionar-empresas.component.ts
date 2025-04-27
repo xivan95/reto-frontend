@@ -56,14 +56,12 @@ export class GestionarEmpresasComponent {
     }
 
     if (this.empresaEditando) {
-      // 🔵 Estamos editando
       this.empresaEditando.nombre = this.nuevaEmpresa.nombre;
       this.empresaEditando.correo = this.nuevaEmpresa.correo;
       this.snackBar.open('Empresa actualizada correctamente.', 'Cerrar', {
         duration: 3000,
       });
     } else {
-      // 🟢 Nueva empresa
       const nueva = {
         id: Date.now(),
         nombre: this.nuevaEmpresa.nombre,
@@ -75,9 +73,9 @@ export class GestionarEmpresasComponent {
       });
     }
 
-    this.empresas = [...this.empresas]; // ✅ Refrescar tabla
-    this.nuevaEmpresa = { nombre: '', correo: '' }; // Limpiar
-    this.empresaEditando = null; // Reset
+    this.empresas = [...this.empresas];
+    this.nuevaEmpresa = { nombre: '', correo: '' }; 
+    this.empresaEditando = null; 
     this.mostrarFormulario = false;
   }
 

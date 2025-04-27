@@ -60,7 +60,6 @@ export class RegistroComponent {
 
     const nuevoUsuario = this.form.value;
 
-    // 🔥 Simulación: guardamos en localStorage (o podrías llamar a un ApiService aquí)
     const usuarios = JSON.parse(
       localStorage.getItem('usuariosRegistrados') || '[]'
     );

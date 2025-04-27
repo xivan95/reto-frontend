@@ -1,4 +1,3 @@
-// src/app/pages/empresa/publicar-vacante/publicar-vacante.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -41,8 +40,8 @@ export class PublicarVacanteComponent {
         ubicacion: ['', Validators.required],
         categoria: ['', Validators.required],
         descripcion: ['', Validators.required],
-        requisitos: ['', Validators.required], // 🔥 Nuevo campo
-        tipoContrato: ['', Validators.required], // 🔥 Opcional, si quieres
+        requisitos: ['', Validators.required], 
+        tipoContrato: ['', Validators.required], 
       });
   }
 

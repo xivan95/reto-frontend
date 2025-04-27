@@ -53,7 +53,7 @@ export class VacantesComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
         this.vacantesService.cancelarVacante(id);
-        this.cargarVacantes(); // 🔥 Recargamos vacantes filtradas
+        this.cargarVacantes();
         this.snackBar.open('Vacante cancelada correctamente.', 'Cerrar', {
           duration: 3000,
         });

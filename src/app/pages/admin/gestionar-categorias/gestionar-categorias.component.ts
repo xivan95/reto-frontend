@@ -34,7 +34,7 @@ export class GestionarCategoriasComponent {
 
   nuevaCategoria: Categoria = { id: 0, nombre: '' };
   categoriaEditando: Categoria | null = null;
-  mostrarFormularioCategoria: boolean = false; // 🔥 ahora sí existe correctamente
+  mostrarFormularioCategoria: boolean = false; 
 
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {}
 
