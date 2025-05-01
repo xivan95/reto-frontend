@@ -29,14 +29,6 @@ export const routes = [
       ).then((m) => m.PublicarVacanteComponent),
     canActivate: [authGuard, roleGuard('empresa')],
   },
-  {
-    path: 'empresa/solicitudes-recibidas',
-    loadComponent: () =>
-      import(
-        './pages/empresa/solicitudes-recibidas/solicitudes-recibidas.component'
-      ).then((m) => m.SolicitudesRecibidasComponent),
-    canActivate: [authGuard, roleGuard('empresa')],
-  },
 
   {
     path: 'admin/gestionar-usuarios',
@@ -61,6 +53,22 @@ export const routes = [
         './pages/admin/gestionar-categorias/gestionar-categorias.component'
       ).then((m) => m.GestionarCategoriasComponent),
     canActivate: [authGuard, roleGuard('admin')],
+  },
+  {
+    path: 'empresa/vacante/:id',
+    loadComponent: () =>
+      import('./pages/empresa/vacante-detalle.component').then(
+        (m) => m.VacanteDetalleComponent
+      ),
+    canActivate: [authGuard, roleGuard('empresa')],
+  },
+  {
+    path: 'empresa/editar-vacante/:id',
+    loadComponent: () =>
+      import('./shared/vacante-editar/vacante-editar.component').then(
+        (m) => m.VacanteEditarComponent
+      ),
+    canActivate: [authGuard, roleGuard('empresa')],
   },
 ];
 

@@ -4,7 +4,7 @@
 
   <ng-container *ngIf="authService.isLoggedIn()">
     <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/vacantes">
-      Vacantes Empresa
+      Mis Vacantes
     </button>
 
     <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-usuarios">

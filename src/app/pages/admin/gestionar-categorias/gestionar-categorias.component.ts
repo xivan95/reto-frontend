@@ -7,6 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Categoria } from '../../../core/models/categoria.model';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component'; // Ajusta ruta si es necesario
 
 
 @Component({
@@ -32,16 +34,18 @@ export class GestionarCategoriasComponent {
 
   nuevaCategoria: Categoria = { id: 0, nombre: '' };
   categoriaEditando: Categoria | null = null;
-  mostrarFormulario: boolean = false;
+  mostrarFormularioCategoria: boolean = false; 
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {}
 
-  agregarCategoria() {
+  agregarCategoria(): void {
     if (!this.nuevaCategoria.nombre.trim()) {
       this.snackBar.open(
         'El nombre de la categoría no puede estar vacío.',
         'Cerrar',
-        { duration: 3000 }
+        {
+          duration: 3000,
+        }
       );
       return;
     }
@@ -63,23 +67,43 @@ export class GestionarCategoriasComponent {
     }
 
     this.categorias = [...this.categorias];
-    this.nuevaCategoria = { id: 0, nombre: '' };
-    this.categoriaEditando = null;
-    this.mostrarFormulario = false;
+    this.resetFormulario();
   }
 
-  editarCategoria(categoria: Categoria) {
+  editarCategoria(categoria: Categoria): void {
     this.categoriaEditando = categoria;
     this.nuevaCategoria = { ...categoria };
+    this.mostrarFormularioCategoria = true;
   }
 
-  eliminarCategoria(id: number) {
-    this.categorias = this.categorias.filter((c) => c.id !== id);
-    this.snackBar.open('Categoría eliminada.', 'Cerrar', { duration: 3000 });
+  eliminarCategoria(id: number): void {
+    const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
+      data: { mensaje: '¿Estás seguro que deseas eliminar esta categoría?' },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmado) => {
+      if (confirmado) {
+        this.categorias = this.categorias.filter((c) => c.id !== id);
+        this.snackBar.open('Categoría eliminada correctamente.', 'Cerrar', {
+          duration: 3000,
+        });
+      }
+    });
   }
-  nuevaCategoriaFormulario() {
+
+  nuevaCategoriaFormulario(): void {
     this.nuevaCategoria = { id: 0, nombre: '' };
     this.categoriaEditando = null;
-    this.mostrarFormulario = true;
+    this.mostrarFormularioCategoria = true;
+  }
+
+  cancelarFormularioCategoria(): void {
+    this.resetFormulario();
+  }
+
+  private resetFormulario(): void {
+    this.nuevaCategoria = { id: 0, nombre: '' };
+    this.categoriaEditando = null;
+    this.mostrarFormularioCategoria = false;
   }
 }

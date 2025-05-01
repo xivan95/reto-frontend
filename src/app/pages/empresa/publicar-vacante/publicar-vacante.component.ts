@@ -10,10 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { VacantesService } from '../../../core/services/vacantes.service';
-import { Vacante } from '../../../core/models/vacante.model';
-
 
 @Component({
   selector: 'app-publicar-vacante',
@@ -24,7 +22,6 @@ import { Vacante } from '../../../core/models/vacante.model';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    RouterModule,
   ],
   templateUrl: './publicar-vacante.component.html',
   styleUrls: ['./publicar-vacante.component.scss'],
@@ -38,12 +35,14 @@ export class PublicarVacanteComponent {
     private router: Router,
     private vacantesService: VacantesService
   ) {
-    this.form = this.fb.group({
-      titulo: ['', Validators.required],
-      ubicacion: ['', Validators.required],
-      categoria: ['', Validators.required],
-      descripcion: ['', Validators.required],
-    });
+      this.form = this.fb.group({
+        titulo: ['', Validators.required],
+        ubicacion: ['', Validators.required],
+        categoria: ['', Validators.required],
+        descripcion: ['', Validators.required],
+        requisitos: ['', Validators.required], 
+        tipoContrato: ['', Validators.required], 
+      });
   }
 
   publicar() {
@@ -54,14 +53,17 @@ export class PublicarVacanteComponent {
       return;
     }
 
-    const nuevaVacante = this.form.value as Vacante;
-
+    const nuevaVacante = this.form.value;
     this.vacantesService.agregarVacante(nuevaVacante);
 
     this.snackBar.open('Vacante publicada exitosamente.', 'Cerrar', {
       duration: 3000,
     });
 
+    this.router.navigate(['/empresa/vacantes']);
+  }
+
+  volver() {
     this.router.navigate(['/empresa/vacantes']);
   }
 }

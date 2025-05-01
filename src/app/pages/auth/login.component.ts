@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core'; // 👈 Agregar OnInit
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+import { ApiService } from '../../core/services/api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -32,7 +35,7 @@ import { LoginResponse } from '../../core/models/loginresponse.model';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
 
@@ -47,6 +50,17 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
+  }
+
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      const role = this.authService.getRole();
+      if (role === 'admin') {
+        this.router.navigate(['/admin/gestionar-usuarios']);
+      } else if (role === 'empresa') {
+        this.router.navigate(['/empresa/vacantes']);
+      }
+    }
   }
 
   login() {
