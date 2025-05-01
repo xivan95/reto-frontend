@@ -12,6 +12,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../core/services/auth.service';
+import { Usuario } from '../../core/models/usuario.model';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-registro',
@@ -25,6 +29,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatSelectModule,
   ],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.scss'],
@@ -35,14 +40,15 @@ export class RegistroComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {
     this.form = this.fb.group({
-      nombre: ['', Validators.required],
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      experiencia: ['', Validators.required],
-      educacion: ['', Validators.required],
+      role: ['user', Validators.required],
     });
   }
 
@@ -51,30 +57,32 @@ export class RegistroComponent {
       this.snackBar.open(
         'Por favor, completa todos los campos correctamente.',
         'Cerrar',
-        {
-          duration: 3000,
-        }
+        { duration: 3000 }
       );
       return;
     }
 
-    const nuevoUsuario = this.form.value;
+    const nuevoUsuario: Usuario = {
+      id: 0,
+      enabled: 1,
+      ...this.form.value,
+    };
 
-    // 🔥 Simulación: guardamos en localStorage (o podrías llamar a un ApiService aquí)
-    const usuarios = JSON.parse(
-      localStorage.getItem('usuariosRegistrados') || '[]'
-    );
-    usuarios.push(nuevoUsuario);
-    localStorage.setItem('usuariosRegistrados', JSON.stringify(usuarios));
-
-    this.snackBar.open(
-      '¡Registro exitoso! Ahora puedes iniciar sesión.',
-      'Cerrar',
-      {
-        duration: 3000,
-      }
-    );
-
-    this.router.navigate(['/auth/login']);
+    this.authService.registerUser(nuevoUsuario).subscribe({
+      next: () => {
+        this.snackBar.open('¡Registro exitoso! Redirigiendo...', 'Cerrar', {
+          duration: 3000,
+        });
+        this.router.navigate(['/auth/login']);
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error(err);
+        this.snackBar.open(
+          'Error al registrar usuario. Inténtalo más tarde.',
+          'Cerrar',
+          { duration: 3000 }
+        );
+      },
+    });
   }
 }

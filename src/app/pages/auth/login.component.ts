@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/services/auth.service';
 import { ApiService } from '../../core/services/api.service';
+import { LoginResponse } from '../../core/models/loginresponse.model';
 
 @Component({
   selector: 'app-login',
@@ -43,40 +44,44 @@ export class LoginComponent {
     private snackBar: MatSnackBar
   ) {
     this.form = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
 
   login() {
-    const { email, password } = this.form.value;
-
-    if (!email || !password) {
+    if (this.form.invalid) {
       this.snackBar.open('Por favor, completa todos los campos.', 'Cerrar', {
         duration: 3000,
       });
       return;
     }
 
+    const { email, password } = this.form.value;
     this.loading = true;
 
     this.apiService.login(email, password).subscribe({
-      next: (response: any) => {
-        this.authService.login(response.token, response.role, response.user);
+      next: (response: LoginResponse) => {
+        this.authService.login(
+          response.accessToken,
+          response.refreshToken,
+          response.user.role,
+          response.user
+        );
 
         this.snackBar.open('¡Bienvenido!', 'Cerrar', { duration: 3000 });
 
-        if (response.role === 'admin') {
+        if (response.user.role === 'admin') {
           this.router.navigate(['/admin/gestionar-usuarios']);
-        } else if (response.role === 'empresa') {
+        } else if (response.user.role === 'empresa') {
           this.router.navigate(['/empresa/vacantes']);
         } else {
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(['/usuario/vacantes']); // Ajusta según ruta
         }
       },
       error: (error) => {
         this.snackBar.open(
-          error.message || 'Error de autenticación',
+          error.error?.message || 'Error de autenticación',
           'Cerrar',
           { duration: 3000 }
         );
