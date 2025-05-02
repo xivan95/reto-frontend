@@ -15,9 +15,8 @@ export class AuthService {
   private readonly CURRENT_USER_KEY = 'current_user';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
 
-  // ✅ URL de producción
-  private readonly API_URL =
-    'https://retodam-production.up.railway.app/api/auth';
+  // private readonly API_URL = 'https://retodam-production.up.railway.app/api/auth';
+  private readonly API_URL = 'http://localhost:8080/api/auth'; // Cambia esto a tu URL de API real
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -50,7 +49,7 @@ export class AuthService {
   login(
     token: string,
     refreshToken: string,
-    role: 'admin' | 'empresa' | 'user',
+    role: 'ADMIN' | 'COMPANY' | 'EMPLOYEE',
     user: Usuario
   ) {
     localStorage.setItem('auth_token', token);
@@ -74,12 +73,23 @@ export class AuthService {
     );
   }
 
-  getRole(): 'empresa' | 'admin' | 'user' | null {
+  getRole(): 'ADMIN' | 'COMPANY' | 'EMPLOYEE' | null {
     return localStorage.getItem(this.ROLE_KEY) as any;
   }
 
   getCurrentUser(): Usuario | null {
     const userJson = localStorage.getItem(this.CURRENT_USER_KEY);
     return userJson ? JSON.parse(userJson) : null;
+  }
+
+  getAllUsuarios(): Observable<Usuario[]> {
+    // return this.http.get<Usuario[]>(
+    //   'https://retodam-production.up.railway.app/api/user'
+    // );
+    return this.http.get<Usuario[]>(
+      'http://localhost:8080/api/user'
+    );
+
+
   }
 }

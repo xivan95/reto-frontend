@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,9 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Categoria } from '../../../core/models/categoria.model';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component'; // Ajusta ruta si es necesario
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component';
+import { CategoriasService } from '../../../core/services/categorias.service';
 
 @Component({
   selector: 'app-gestionar-categorias',
@@ -21,53 +21,74 @@ import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatDialogModule,
   ],
   templateUrl: './gestionar-categorias.component.html',
   styleUrls: ['./gestionar-categorias.component.scss'],
 })
-export class GestionarCategoriasComponent {
-  categorias: Categoria[] = [
-    { id: 1, nombre: 'Programación' },
-    { id: 2, nombre: 'Diseño' },
-    { id: 3, nombre: 'Marketing' },
-  ];
-
+export class GestionarCategoriasComponent implements OnInit {
+  categorias: Categoria[] = [];
   nuevaCategoria: Categoria = { id: 0, nombre: '' };
   categoriaEditando: Categoria | null = null;
-  mostrarFormularioCategoria: boolean = false; 
+  mostrarFormularioCategoria: boolean = false;
 
-  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private categoriasService: CategoriasService
+  ) {}
+
+  ngOnInit(): void {
+    this.categoriasService.getAll().subscribe({
+      next: (categorias) => (this.categorias = categorias),
+      error: () =>
+        this.snackBar.open('Error al cargar las categorías.', 'Cerrar', {
+          duration: 3000,
+        }),
+    });
+  }
 
   agregarCategoria(): void {
     if (!this.nuevaCategoria.nombre.trim()) {
       this.snackBar.open(
         'El nombre de la categoría no puede estar vacío.',
         'Cerrar',
-        {
-          duration: 3000,
-        }
+        { duration: 3000 }
       );
       return;
     }
 
     if (this.categoriaEditando) {
-      this.categoriaEditando.nombre = this.nuevaCategoria.nombre.trim();
-      this.snackBar.open('Categoría actualizada correctamente.', 'Cerrar', {
-        duration: 3000,
+      this.categoriasService.update(this.nuevaCategoria).subscribe({
+        next: () => {
+          this.snackBar.open('Categoría actualizada correctamente.', 'Cerrar', {
+            duration: 3000,
+          });
+          this.ngOnInit();
+          this.resetFormulario();
+        },
+        error: () => {
+          this.snackBar.open('Error al actualizar categoría.', 'Cerrar', {
+            duration: 3000,
+          });
+        },
       });
     } else {
-      const nueva: Categoria = {
-        id: Date.now(),
-        nombre: this.nuevaCategoria.nombre.trim(),
-      };
-      this.categorias = [...this.categorias, nueva];
-      this.snackBar.open('Categoría creada exitosamente.', 'Cerrar', {
-        duration: 3000,
+      this.categoriasService.create(this.nuevaCategoria).subscribe({
+        next: () => {
+          this.snackBar.open('Categoría creada exitosamente.', 'Cerrar', {
+            duration: 3000,
+          });
+          this.ngOnInit();
+          this.resetFormulario();
+        },
+        error: () => {
+          this.snackBar.open('Error al crear categoría.', 'Cerrar', {
+            duration: 3000,
+          });
+        },
       });
     }
-
-    this.categorias = [...this.categorias];
-    this.resetFormulario();
   }
 
   editarCategoria(categoria: Categoria): void {
@@ -83,9 +104,18 @@ export class GestionarCategoriasComponent {
 
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
-        this.categorias = this.categorias.filter((c) => c.id !== id);
-        this.snackBar.open('Categoría eliminada correctamente.', 'Cerrar', {
-          duration: 3000,
+        this.categoriasService.delete(id).subscribe({
+          next: () => {
+            this.snackBar.open('Categoría eliminada correctamente.', 'Cerrar', {
+              duration: 3000,
+            });
+            this.ngOnInit();
+          },
+          error: () => {
+            this.snackBar.open('Error al eliminar la categoría.', 'Cerrar', {
+              duration: 3000,
+            });
+          },
         });
       }
     });

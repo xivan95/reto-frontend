@@ -1,7 +1,7 @@
 import { provideRouter } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const routes = [
@@ -19,7 +19,7 @@ export const routes = [
       import('./pages/empresa/vacantes/vacantes.component').then(
         (m) => m.VacantesComponent
       ),
-    canActivate: [authGuard, roleGuard('empresa')],
+    canActivate: [authGuard, roleGuard('COMPANY')],
   },
   {
     path: 'empresa/publicar-vacante',
@@ -27,7 +27,7 @@ export const routes = [
       import(
         './pages/empresa/publicar-vacante/publicar-vacante.component'
       ).then((m) => m.PublicarVacanteComponent),
-    canActivate: [authGuard, roleGuard('empresa')],
+    canActivate: [authGuard, roleGuard('COMPANY')],
   },
 
   {
@@ -36,7 +36,7 @@ export const routes = [
       import('./pages/admin/home-admin/home-admin.component').then(
         (m) => m.HomeAdminComponent
       ),
-    canActivate: [authGuard, roleGuard('admin')],
+    canActivate: [authGuard, roleGuard('ADMIN')],
   },
   {
     path: 'admin/gestionar-empresas',
@@ -44,7 +44,7 @@ export const routes = [
       import(
         './pages/admin/gestionar-empresas/gestionar-empresas.component'
       ).then((m) => m.GestionarEmpresasComponent),
-    canActivate: [authGuard, roleGuard('admin')],
+    canActivate: [authGuard, roleGuard('ADMIN')],
   },
   {
     path: 'admin/gestionar-categorias',
@@ -52,7 +52,7 @@ export const routes = [
       import(
         './pages/admin/gestionar-categorias/gestionar-categorias.component'
       ).then((m) => m.GestionarCategoriasComponent),
-    canActivate: [authGuard, roleGuard('admin')],
+    canActivate: [authGuard, roleGuard('ADMIN')],
   },
   {
     path: 'empresa/vacante/:id',
@@ -60,7 +60,7 @@ export const routes = [
       import('./pages/empresa/vacante-detalle.component').then(
         (m) => m.VacanteDetalleComponent
       ),
-    canActivate: [authGuard, roleGuard('empresa')],
+    canActivate: [authGuard, roleGuard('COMPANY')],
   },
   {
     path: 'empresa/editar-vacante/:id',
@@ -68,14 +68,13 @@ export const routes = [
       import('./shared/vacante-editar/vacante-editar.component').then(
         (m) => m.VacanteEditarComponent
       ),
-    canActivate: [authGuard, roleGuard('empresa')],
+    canActivate: [authGuard, roleGuard('COMPANY')],
   },
 ];
 
 export const appConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
-    { provide: HTTP_INTERCEPTORS, useValue: authInterceptor, multi: true },
+    provideHttpClient(withInterceptors([authInterceptor])),
   ],
 };

@@ -51,23 +51,24 @@ export class VacanteEditarComponent implements OnInit {
 
   ngOnInit(): void {
     this.vacanteId = Number(this.route.snapshot.paramMap.get('id'));
-    this.vacante = this.vacantesService.getVacantePorId(this.vacanteId);
+    this.vacantesService.getVacantePorId(this.vacanteId).subscribe({
+      next: (vacante) => {
+        this.vacante = vacante;
+        this.form.patchValue({
+          titulo: vacante.titulo,
+          ubicacion: vacante.ubicacion,
+          categoria: vacante.categoria,
+          descripcion: vacante.descripcion,
+          requisitos: vacante.requisitos,
+          tipoContrato: vacante.tipoContrato,
+        });
+      },
+      error: () => {
+        this.snackBar.open('Vacante no encontrada.', 'Cerrar', { duration: 3000 });
+        this.router.navigate(['/empresa/vacante', this.vacanteId]);
+      },
+    });
 
-    if (this.vacante) {
-      this.form.patchValue({
-        titulo: this.vacante.titulo,
-        ubicacion: this.vacante.ubicacion,
-        categoria: this.vacante.categoria,
-        descripcion: this.vacante.descripcion,
-        requisitos: this.vacante.requisitos,
-        tipoContrato: this.vacante.tipoContrato,
-      });
-    } else {
-      this.snackBar.open('Vacante no encontrada.', 'Cerrar', {
-        duration: 3000,
-      });
-      this.router.navigate(['/empresa/vacante', this.vacanteId]);
-    }
   }
 
   guardarCambios() {
@@ -81,7 +82,12 @@ export class VacanteEditarComponent implements OnInit {
       ...this.form.value,
     };
 
-    this.vacantesService.actualizarVacante(vacanteActualizada);
+    this.vacantesService.actualizarVacante(vacanteActualizada).subscribe(() => {
+      this.snackBar.open('Vacante actualizada correctamente.', 'Cerrar', {
+        duration: 3000,
+      });
+      this.router.navigate(['/empresa/vacante', this.vacanteId]);
+    });
 
     this.snackBar.open('Vacante actualizada correctamente.', 'Cerrar', {
       duration: 3000,

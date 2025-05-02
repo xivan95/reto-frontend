@@ -3,7 +3,7 @@ export interface Usuario {
   name: string;
   email: string;
   password: string;
-  role: 'user' | 'empresa' | 'admin';
+  role: 'EMPLOYEE' | 'COMPANY' | 'ADMIN';
   experiencia: string;
   educacion: string;
 }

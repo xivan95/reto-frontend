@@ -38,8 +38,18 @@ export class VacanteDetalleComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.vacante = this.vacantesService.getVacantePorId(id);
-    this.actualizarSolicitudes();
+
+    this.vacantesService.getVacantePorId(id).subscribe({
+      next: (vacante) => {
+        this.vacante = vacante;
+        this.actualizarSolicitudes();
+      },
+      error: () => {
+        this.snackBar.open('Vacante no encontrada.', 'Cerrar', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   asignarSolicitud(solicitudId: number): void {
@@ -51,16 +61,18 @@ export class VacanteDetalleComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((comentario) => {
       if (comentario !== null && comentario.trim() !== '') {
-        this.vacantesService.asignarVacante(
-          this.vacante!.id,
-          solicitudId,
-          comentario
-        );
-        this.actualizarSolicitudes();
-
-        this.snackBar.open('Solicitud adjudicada con comentario.', 'Cerrar', {
-          duration: 3000,
-        });
+        this.vacantesService
+          .asignarVacante(this.vacante!.id, solicitudId, comentario)
+          .subscribe(() => {
+            this.snackBar.open(
+              'Solicitud adjudicada con comentario.',
+              'Cerrar',
+              {
+                duration: 3000,
+              }
+            );
+            this.actualizarSolicitudes();
+          });
       }
     });
   }
@@ -74,16 +86,18 @@ export class VacanteDetalleComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((comentario) => {
       if (comentario !== null && comentario.trim() !== '') {
-        this.vacantesService.cancelarSolicitud(
-          this.vacante!.id,
-          solicitudId,
-          comentario
-        );
-        this.actualizarSolicitudes();
-
-        this.snackBar.open('Solicitud cancelada con comentario.', 'Cerrar', {
-          duration: 3000,
-        });
+        this.vacantesService
+          .cancelarSolicitud(this.vacante!.id, solicitudId, comentario)
+          .subscribe(() => {
+            this.snackBar.open(
+              'Solicitud cancelada con comentario.',
+              'Cerrar',
+              {
+                duration: 3000,
+              }
+            );
+            this.actualizarSolicitudes();
+          });
       }
     });
   }
@@ -94,12 +108,17 @@ export class VacanteDetalleComponent implements OnInit {
       return;
     }
 
-    const todas = this.vacantesService.getSolicitudesByVacante(this.vacante.id);
-
-    this.solicitudes = todas.sort((a, b) => {
-      if (a.estado === 'pendiente' && b.estado !== 'pendiente') return -1;
-      if (a.estado !== 'pendiente' && b.estado === 'pendiente') return 1;
-      return 0;
+    this.vacantesService.getSolicitudesByVacante(this.vacante.id).subscribe({
+      next: (todas: Solicitud[]) => {
+        this.solicitudes = todas.sort((a: Solicitud, b: Solicitud) => {
+          if (a.estado === 'pendiente' && b.estado !== 'pendiente') return -1;
+          if (a.estado !== 'pendiente' && b.estado === 'pendiente') return 1;
+          return 0;
+        });
+      },
+      error: () => {
+        this.solicitudes = [];
+      },
     });
   }
 }

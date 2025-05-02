@@ -3,19 +3,19 @@
   <span class="spacer"></span>
 
   <ng-container *ngIf="authService.isLoggedIn()">
-    <button *ngIf="authService.getRole() === 'empresa'" mat-button routerLink="/empresa/vacantes">
+    <button *ngIf="authService.getRole() === 'COMPANY'" mat-button routerLink="/empresa/vacantes">
       Mis Vacantes
     </button>
 
-    <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-usuarios">
+    <button *ngIf="authService.getRole() === 'ADMIN'" mat-button routerLink="/admin/gestionar-usuarios">
       Gestionar Usuarios
     </button>
 
-    <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-empresas">
+    <button *ngIf="authService.getRole() === 'ADMIN'" mat-button routerLink="/admin/gestionar-empresas">
       Gestionar Empresas
     </button>
 
-    <button *ngIf="authService.getRole() === 'admin'" mat-button routerLink="/admin/gestionar-categorias">
+    <button *ngIf="authService.getRole() === 'ADMIN'" mat-button routerLink="/admin/gestionar-categorias">
       Gestionar Categorías
     </button>
 

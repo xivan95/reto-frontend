@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,8 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Usuario } from '../../../core/models/usuario.model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component'; // Asegúrate que esté bien la ruta
-
+import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component';
 
 @Component({
   selector: 'app-home-admin',
@@ -31,8 +30,8 @@ import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion
   templateUrl: './home-admin.component.html',
   styleUrls: ['./home-admin.component.scss'],
 })
-export class HomeAdminComponent {
-  rolesDisponibles = ['user', 'empresa', 'admin'];
+export class HomeAdminComponent implements OnInit {
+  rolesDisponibles = ['EMPLOYEE', 'COMPANY', 'ADMIN'];
   mostrarFormularioUsuario = false;
   editarUsuario: Usuario | null = null;
 
@@ -41,46 +40,31 @@ export class HomeAdminComponent {
     name: '',
     email: '',
     password: '',
-    role: 'user',
+    role: 'EMPLOYEE',
     experiencia: '',
     educacion: '',
   };
 
-  usuarios: Usuario[] = [
-    {
-      id: 1,
-      name: 'Carlos García',
-      email: 'carlos@example.com',
-      password: '1234',
-      role: 'user',
-      experiencia: '2 años como Desarrollador Frontend',
-      educacion: 'Grado en Ingeniería Informática',
-    },
-    {
-      id: 2,
-      name: 'Laura Fernández',
-      email: 'laura@example.com',
-      password: '1234',
-      role: 'empresa',
-      experiencia: 'CEO de DataSolutions',
-      educacion: 'MBA en Dirección de Empresas',
-    },
-    {
-      id: 3,
-      name: 'Admin Principal',
-      email: 'admin@admin.com',
-      password: 'admin123',
-      role: 'admin',
-      experiencia: '5 años como Administrador de Sistemas',
-      educacion: 'Máster en Ciberseguridad',
-    },
-  ];
+  usuarios: Usuario[] = [];
 
   constructor(
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
+
+  ngOnInit(): void {
+    this.authService.getAllUsuarios().subscribe({
+      next: (usuarios) => {
+        this.usuarios = usuarios;
+      },
+      error: () => {
+        this.snackBar.open('Error al cargar los usuarios.', 'Cerrar', {
+          duration: 3000,
+        });
+      },
+    });
+  }
 
   crearUsuario() {
     if (!this.nuevoUsuario.name.trim() || !this.nuevoUsuario.email.trim()) {
@@ -91,35 +75,31 @@ export class HomeAdminComponent {
     }
 
     if (this.editarUsuario) {
-      // Editando
-      const index = this.usuarios.findIndex(
-        (u) => u.id === this.editarUsuario!.id
-      );
-      if (index !== -1) {
-        this.usuarios[index] = { ...this.nuevoUsuario };
-        this.snackBar.open('Usuario actualizado correctamente.', 'Cerrar', {
+      // Aquí iría llamada PUT al backend para editar usuario
+      this.snackBar.open(
+        'Funcionalidad de edición aún no implementada.',
+        'Cerrar',
+        {
           duration: 3000,
-        });
-      }
+        }
+      );
     } else {
-      // Crear nuevo
-      const nuevo: Usuario = {
-        id: Date.now(),
-        name: this.nuevoUsuario.name.trim(),
-        email: this.nuevoUsuario.email.trim(),
-        password: this.nuevoUsuario.password.trim(),
-        role: this.nuevoUsuario.role,
-        experiencia: this.nuevoUsuario.experiencia.trim(),
-        educacion: this.nuevoUsuario.educacion.trim(),
-      };
-      this.usuarios.push(nuevo);
-      this.snackBar.open('Usuario creado exitosamente.', 'Cerrar', {
-        duration: 3000,
+      // Registro usando el método existente en AuthService
+      this.authService.registerUser(this.nuevoUsuario).subscribe({
+        next: () => {
+          this.snackBar.open('Usuario creado exitosamente.', 'Cerrar', {
+            duration: 3000,
+          });
+          this.ngOnInit(); // recargar usuarios
+          this.resetFormulario();
+        },
+        error: () => {
+          this.snackBar.open('Error al registrar el usuario.', 'Cerrar', {
+            duration: 3000,
+          });
+        },
       });
     }
-
-    this.usuarios = [...this.usuarios];
-    this.resetFormulario();
   }
 
   cancelarFormularioUsuario() {
@@ -146,9 +126,7 @@ export class HomeAdminComponent {
           this.snackBar.open(
             'Error: No se encontró el usuario actual.',
             'Cerrar',
-            {
-              duration: 3000,
-            }
+            { duration: 3000 }
           );
           return;
         }
@@ -160,10 +138,14 @@ export class HomeAdminComponent {
           return;
         }
 
-        this.usuarios = this.usuarios.filter((u) => u.id !== usuarioId);
-        this.snackBar.open('Usuario eliminado correctamente.', 'Cerrar', {
-          duration: 3000,
-        });
+        // Aquí iría llamada DELETE al backend
+        this.snackBar.open(
+          'Funcionalidad de eliminación aún no implementada.',
+          'Cerrar',
+          {
+            duration: 3000,
+          }
+        );
       }
     });
   }
@@ -174,7 +156,7 @@ export class HomeAdminComponent {
       name: '',
       email: '',
       password: '',
-      role: 'user',
+      role: 'EMPLOYEE',
       experiencia: '',
       educacion: '',
     };

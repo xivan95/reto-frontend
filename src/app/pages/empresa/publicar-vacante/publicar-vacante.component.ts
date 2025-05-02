@@ -54,7 +54,7 @@ export class PublicarVacanteComponent {
     }
 
     const nuevaVacante = this.form.value;
-    this.vacantesService.agregarVacante(nuevaVacante);
+    this.vacantesService.crearVacante(nuevaVacante);
 
     this.snackBar.open('Vacante publicada exitosamente.', 'Cerrar', {
       duration: 3000,
