@@ -28,7 +28,7 @@ import { CategoriasService } from '../../../core/services/categorias.service';
 })
 export class GestionarCategoriasComponent implements OnInit {
   categorias: Categoria[] = [];
-  nuevaCategoria: Categoria = { id: 0, nombre: '' };
+  nuevaCategoria: Categoria = { idCategoria: 0, nombre: '' };
   categoriaEditando: Categoria | null = null;
   mostrarFormularioCategoria: boolean = false;
 
@@ -59,7 +59,13 @@ export class GestionarCategoriasComponent implements OnInit {
     }
 
     if (this.categoriaEditando) {
-      this.categoriasService.update(this.nuevaCategoria).subscribe({
+      // Asegura que el ID no sea 0 ni undefined
+      const categoriaAActualizar: Categoria = {
+        ...this.nuevaCategoria,
+        idCategoria: this.categoriaEditando.idCategoria, // <- esto garantiza que el ID es correcto
+      };
+
+      this.categoriasService.update(categoriaAActualizar).subscribe({
         next: () => {
           this.snackBar.open('Categoría actualizada correctamente.', 'Cerrar', {
             duration: 3000,
@@ -92,6 +98,7 @@ export class GestionarCategoriasComponent implements OnInit {
   }
 
   editarCategoria(categoria: Categoria): void {
+    console.log('[DEBUG] Editando categoría con ID:', categoria.idCategoria);
     this.categoriaEditando = categoria;
     this.nuevaCategoria = { ...categoria };
     this.mostrarFormularioCategoria = true;
@@ -122,7 +129,7 @@ export class GestionarCategoriasComponent implements OnInit {
   }
 
   nuevaCategoriaFormulario(): void {
-    this.nuevaCategoria = { id: 0, nombre: '' };
+    this.nuevaCategoria = { idCategoria: 0, nombre: '' };
     this.categoriaEditando = null;
     this.mostrarFormularioCategoria = true;
   }
@@ -132,7 +139,7 @@ export class GestionarCategoriasComponent implements OnInit {
   }
 
   private resetFormulario(): void {
-    this.nuevaCategoria = { id: 0, nombre: '' };
+    this.nuevaCategoria = { idCategoria: 0, nombre: '' };
     this.categoriaEditando = null;
     this.mostrarFormularioCategoria = false;
   }

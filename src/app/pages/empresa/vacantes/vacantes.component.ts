@@ -28,7 +28,7 @@ export class VacantesComponent implements OnInit {
   constructor(private vacantesService: VacantesService) {}
 
   ngOnInit(): void {
-    this.vacantesService.getVacantesDeEmpresa().subscribe((vacantes) => {
+    this.vacantesService.getVacantes().subscribe((vacantes) => {
       this.vacantes = vacantes;
     });
   }

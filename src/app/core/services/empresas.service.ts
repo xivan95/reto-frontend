@@ -23,7 +23,8 @@ export class EmpresasService {
   }
 
   create(empresa: Empresa): Observable<Empresa> {
-    return this.http.post<Empresa>(this.API_URL, empresa);
+    const { idEmpresa, ...empresaSinId } = empresa; 
+    return this.http.post<Empresa>(this.API_URL, empresaSinId);
   }
 
   update(empresa: Empresa): Observable<Empresa> {

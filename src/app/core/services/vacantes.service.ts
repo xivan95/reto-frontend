@@ -18,11 +18,6 @@ export class VacantesService {
     return this.http.get<Vacante[]>(`${this.API_URL}/vacantes`);
   }
 
-  // 📥 Obtener vacantes asociadas a la empresa logueada
-  getVacantesDeEmpresa(): Observable<Vacante[]> {
-    return this.http.get<Vacante[]>(`${this.API_URL}/empresa/vacantes`);
-  }
-
   // 📥 Obtener una vacante por ID
   getVacantePorId(id: number): Observable<Vacante> {
     return this.http.get<Vacante>(`${this.API_URL}/vacantes/${id}`);

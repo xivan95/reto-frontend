@@ -1,18 +1,16 @@
 import { provideRouter } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' as const },
-
   {
     path: 'auth/login',
     loadComponent: () =>
       import('./pages/auth/login.component').then((m) => m.LoginComponent),
   },
-
   {
     path: 'empresa/vacantes',
     loadComponent: () =>
@@ -29,7 +27,22 @@ export const routes = [
       ).then((m) => m.PublicarVacanteComponent),
     canActivate: [authGuard, roleGuard('COMPANY')],
   },
-
+  {
+    path: 'empresa/vacante/:id',
+    loadComponent: () =>
+      import('./pages/empresa/vacante-detalle.component').then(
+        (m) => m.VacanteDetalleComponent
+      ),
+    canActivate: [authGuard, roleGuard('COMPANY')],
+  },
+  {
+    path: 'empresa/editar-vacante/:id',
+    loadComponent: () =>
+      import('./shared/vacante-editar/vacante-editar.component').then(
+        (m) => m.VacanteEditarComponent
+      ),
+    canActivate: [authGuard, roleGuard('COMPANY')],
+  },
   {
     path: 'admin/gestionar-usuarios',
     loadComponent: () =>
@@ -53,22 +66,6 @@ export const routes = [
         './pages/admin/gestionar-categorias/gestionar-categorias.component'
       ).then((m) => m.GestionarCategoriasComponent),
     canActivate: [authGuard, roleGuard('ADMIN')],
-  },
-  {
-    path: 'empresa/vacante/:id',
-    loadComponent: () =>
-      import('./pages/empresa/vacante-detalle.component').then(
-        (m) => m.VacanteDetalleComponent
-      ),
-    canActivate: [authGuard, roleGuard('COMPANY')],
-  },
-  {
-    path: 'empresa/editar-vacante/:id',
-    loadComponent: () =>
-      import('./shared/vacante-editar/vacante-editar.component').then(
-        (m) => m.VacanteEditarComponent
-      ),
-    canActivate: [authGuard, roleGuard('COMPANY')],
   },
 ];
 

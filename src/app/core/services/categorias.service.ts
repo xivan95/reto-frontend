@@ -22,7 +22,7 @@ export class CategoriasService {
 
   update(categoria: Categoria): Observable<Categoria> {
     return this.http.put<Categoria>(
-      `${this.API_URL}/${categoria.id}`,
+      `${this.API_URL}/${categoria.idCategoria}`,
       categoria
     );
   }

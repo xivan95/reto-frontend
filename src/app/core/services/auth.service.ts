@@ -36,6 +36,7 @@ export class AuthService {
     localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(response.user));
   }
 
+
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -82,14 +83,14 @@ export class AuthService {
     return userJson ? JSON.parse(userJson) : null;
   }
 
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refresh_token');
+  }
+
   getAllUsuarios(): Observable<Usuario[]> {
     // return this.http.get<Usuario[]>(
     //   'https://retodam-production.up.railway.app/api/user'
     // );
-    return this.http.get<Usuario[]>(
-      'http://localhost:8080/api/user'
-    );
-
-
+    return this.http.get<Usuario[]>('http://localhost:8080/api/user');
   }
 }
