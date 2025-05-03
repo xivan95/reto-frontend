@@ -6,4 +6,5 @@ export interface Usuario {
   role: 'EMPLOYEE' | 'COMPANY' | 'ADMIN';
   experiencia: string;
   educacion: string;
+  enabled: boolean;
 }

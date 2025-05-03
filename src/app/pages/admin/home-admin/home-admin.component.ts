@@ -13,6 +13,8 @@ import { Usuario } from '../../../core/models/usuario.model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component';
 
+// ... importaciones igual que antes
+
 @Component({
   selector: 'app-home-admin',
   standalone: true,
@@ -43,6 +45,7 @@ export class HomeAdminComponent implements OnInit {
     role: 'EMPLOYEE',
     experiencia: '',
     educacion: '',
+    enabled: true,
   };
 
   usuarios: Usuario[] = [];
@@ -54,19 +57,22 @@ export class HomeAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.cargarUsuarios();
+  }
+
+  cargarUsuarios() {
     this.authService.getAllUsuarios().subscribe({
       next: (usuarios) => {
-        this.usuarios = usuarios;
+        this.usuarios = usuarios.filter((usuario) => usuario.enabled);
       },
-      error: () => {
+      error: () =>
         this.snackBar.open('Error al cargar los usuarios.', 'Cerrar', {
           duration: 3000,
-        });
-      },
+        }),
     });
   }
 
-  crearUsuario() {
+  guardarCambiosUsuario() {
     if (!this.nuevoUsuario.name.trim() || !this.nuevoUsuario.email.trim()) {
       this.snackBar.open('Por favor, completa todos los campos.', 'Cerrar', {
         duration: 3000,
@@ -74,32 +80,22 @@ export class HomeAdminComponent implements OnInit {
       return;
     }
 
-    if (this.editarUsuario) {
-      // Aquí iría llamada PUT al backend para editar usuario
-      this.snackBar.open(
-        'Funcionalidad de edición aún no implementada.',
-        'Cerrar',
-        {
+    console.log('[DEBUG] Enviando usuario actualizado:', this.nuevoUsuario);
+
+    this.authService.updateUsuario(this.nuevoUsuario).subscribe({
+      next: () => {
+        this.snackBar.open('Usuario actualizado correctamente.', 'Cerrar', {
           duration: 3000,
-        }
-      );
-    } else {
-      // Registro usando el método existente en AuthService
-      this.authService.registerUser(this.nuevoUsuario).subscribe({
-        next: () => {
-          this.snackBar.open('Usuario creado exitosamente.', 'Cerrar', {
-            duration: 3000,
-          });
-          this.ngOnInit(); // recargar usuarios
-          this.resetFormulario();
-        },
-        error: () => {
-          this.snackBar.open('Error al registrar el usuario.', 'Cerrar', {
-            duration: 3000,
-          });
-        },
-      });
-    }
+        });
+        this.cargarUsuarios();
+        this.resetFormulario();
+      },
+      error: () => {
+        this.snackBar.open('Error al actualizar el usuario.', 'Cerrar', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   cancelarFormularioUsuario() {
@@ -108,7 +104,16 @@ export class HomeAdminComponent implements OnInit {
 
   abrirFormularioEditar(usuario: Usuario) {
     this.editarUsuario = { ...usuario };
-    this.nuevoUsuario = { ...usuario };
+    this.nuevoUsuario = {
+      id: usuario.id,
+      name: usuario.name,
+      email: usuario.email,
+      role: usuario.role,
+      password: '',
+      experiencia: usuario.experiencia ?? '',
+      educacion: usuario.educacion ?? '',
+      enabled: usuario.enabled,
+    };
     this.mostrarFormularioUsuario = true;
   }
 
@@ -119,33 +124,19 @@ export class HomeAdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
-        const currentUserStr = localStorage.getItem('current_user');
-        const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
-
-        if (!currentUser) {
-          this.snackBar.open(
-            'Error: No se encontró el usuario actual.',
-            'Cerrar',
-            { duration: 3000 }
-          );
-          return;
-        }
-
-        if (usuarioId === currentUser.id) {
-          this.snackBar.open('No puedes eliminar tu propia cuenta.', 'Cerrar', {
-            duration: 3000,
-          });
-          return;
-        }
-
-        // Aquí iría llamada DELETE al backend
-        this.snackBar.open(
-          'Funcionalidad de eliminación aún no implementada.',
-          'Cerrar',
-          {
-            duration: 3000,
-          }
-        );
+        this.authService.deleteUsuario(usuarioId).subscribe({
+          next: () => {
+            this.snackBar.open('Usuario eliminado correctamente.', 'Cerrar', {
+              duration: 3000,
+            });
+            this.cargarUsuarios();
+          },
+          error: () => {
+            this.snackBar.open('Error al eliminar el usuario.', 'Cerrar', {
+              duration: 3000,
+            });
+          },
+        });
       }
     });
   }
@@ -159,6 +150,7 @@ export class HomeAdminComponent implements OnInit {
       role: 'EMPLOYEE',
       experiencia: '',
       educacion: '',
+      enabled: true,
     };
     this.editarUsuario = null;
     this.mostrarFormularioUsuario = false;

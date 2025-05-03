@@ -36,7 +36,6 @@ export class AuthService {
     localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(response.user));
   }
 
-
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -76,6 +75,18 @@ export class AuthService {
 
   getRole(): 'ADMIN' | 'COMPANY' | 'EMPLOYEE' | null {
     return localStorage.getItem(this.ROLE_KEY) as any;
+  }
+
+  updateUsuario(usuario: Usuario): Observable<Usuario> {
+    const { authorities, ...sinAuthorities } = usuario as any;
+    return this.http.put<Usuario>(
+      'http://localhost:8080/api/user/update',
+      sinAuthorities
+    );
+  }
+
+  deleteUsuario(id: number): Observable<void> {
+    return this.http.delete<void>(`http://localhost:8080/api/user/${id}`);
   }
 
   getCurrentUser(): Usuario | null {

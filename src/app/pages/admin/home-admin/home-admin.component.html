@@ -1,20 +1,17 @@
 <h1>Gestionar Usuarios</h1>
 
-<button mat-raised-button color="primary" (click)="mostrarFormularioUsuario = true">
-  Crear Nuevo Usuario
-</button>
-
+<!-- Formulario solo para editar -->
 <div *ngIf="mostrarFormularioUsuario" class="usuario-form">
-  <h2>{{ editarUsuario ? 'Editar Usuario' : 'Crear Usuario' }}</h2>
+  <h2>Editar Usuario</h2>
 
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Nombre</mat-label>
-    <input matInput [(ngModel)]="nuevoUsuario.name" name="nombre">
+    <input matInput [(ngModel)]="nuevoUsuario.name" name="nombre" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Correo</mat-label>
-    <input matInput [(ngModel)]="nuevoUsuario.email" name="email">
+    <input matInput [(ngModel)]="nuevoUsuario.email" name="email" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
@@ -27,8 +24,8 @@
   </mat-form-field>
 
   <div class="form-buttons">
-    <button mat-raised-button color="accent" (click)="crearUsuario()">
-      {{ editarUsuario ? 'Guardar Cambios' : 'Crear Usuario' }}
+    <button mat-raised-button color="accent" (click)="guardarCambiosUsuario()">
+      Guardar Cambios
     </button>
     <button mat-button color="warn" (click)="cancelarFormularioUsuario()">
       Cancelar
@@ -70,8 +67,6 @@
     </td>
   </ng-container>
 
-  <!-- Filas -->
   <tr mat-header-row *matHeaderRowDef="['nombre', 'email', 'role', 'acciones']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['nombre', 'email', 'role', 'acciones'];"></tr>
-
+  <tr mat-row *matRowDef="let row; columns: ['nombre', 'email', 'role', 'acciones']"></tr>
 </table>
