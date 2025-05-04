@@ -8,7 +8,8 @@ import { Categoria } from '../models/categoria.model';
 })
 export class CategoriasService {
   //private readonly API_URL = 'https://retodam-production.up.railway.app/api/categorias';
-  private readonly API_URL = 'http://localhost:8080/api/categorias'; // Cambia esto a tu URL de API real
+  private readonly API_URL =
+    'https://retodam-production.up.railway.app/api/categorias'; // Cambia esto a tu URL de API real
 
   constructor(private http: HttpClient) {}
 

@@ -8,7 +8,8 @@ import { Empresa } from '../models/empresa.model';
 })
 export class EmpresasService {
   //private readonly API_URL = 'https://retodam-production.up.railway.app/api/empresas';
-  private readonly API_URL = 'http://localhost:8080/api/empresas'; // Cambia esto a tu URL de API real
+  private readonly API_URL =
+    'https://retodam-production.up.railway.app/api/empresas'; // Cambia esto a tu URL de API real
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +18,7 @@ export class EmpresasService {
   }
 
   create(empresa: Empresa): Observable<Empresa> {
-    const { idEmpresa, ...empresaSinId } = empresa; 
+    const { idEmpresa, ...empresaSinId } = empresa;
     return this.http.post<Empresa>(this.API_URL, empresaSinId);
   }
 

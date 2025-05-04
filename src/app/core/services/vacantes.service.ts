@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class VacantesService {
   //private readonly API_URL = 'https://retodam-production.up.railway.app/api';
-  private readonly API_URL = 'http://localhost:8080/api'; // Cambia esto a tu URL de API real
+  private readonly API_URL = 'https://retodam-production.up.railway.app/api'; // Cambia esto a tu URL de API real
 
   constructor(private http: HttpClient) {}
 
@@ -29,10 +29,7 @@ export class VacantesService {
 
   // 🗑️ Eliminar una vacante (o cancelarla si solo se desactiva)
   cancelarVacante(id: number): Observable<void> {
-    return this.http.put<void>(
-      `${this.API_URL}/vacantes/${id}/cancelar`,
-      {}
-    );
+    return this.http.put<void>(`${this.API_URL}/vacantes/${id}/cancelar`, {});
   }
 
   // 📝 Actualizar vacante
