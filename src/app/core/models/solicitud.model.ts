@@ -2,9 +2,9 @@ export interface Solicitud {
   id: number;
   nombre: string;
   email: string;
-  estado: 'pendiente' | 'adjudicada' | 'cancelada';
+  estado: number;
   vacanteId: number;
-  cvUrl?: string;
-  comentario?: string;
+  archivo?: string;
+  comentarios?: string;
   fecha: string
 }

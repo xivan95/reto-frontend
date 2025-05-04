@@ -2,18 +2,8 @@
 
 <form [formGroup]="form" (ngSubmit)="publicar()" class="vacante-form">
   <mat-form-field appearance="outline">
-    <mat-label>Título</mat-label>
-    <input matInput formControlName="titulo" placeholder="Ej: Desarrollador Angular">
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Ubicación</mat-label>
-    <input matInput formControlName="ubicacion" placeholder="Ej: Madrid, España">
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Categoría</mat-label>
-    <input matInput formControlName="categoria" placeholder="Ej: Programación, Diseño, etc.">
+    <mat-label>Nombre del Puesto</mat-label>
+    <input matInput formControlName="nombre" placeholder="Ej: Desarrollador Angular">
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -22,14 +12,23 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-  <mat-label>Requisitos</mat-label>
-  <input matInput formControlName="requisitos" placeholder="Ej: Experiencia en Angular, RxJS, etc.">
-</mat-form-field>
+    <mat-label>Detalles / Requisitos</mat-label>
+    <input matInput formControlName="detalles" placeholder="Ej: Experiencia en Angular, RxJS, etc.">
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Tipo de Contrato</mat-label>
-  <input matInput formControlName="tipoContrato" placeholder="Ej: Tiempo Completo, Freelance, etc.">
-</mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Salario</mat-label>
+    <input matInput type="number" formControlName="salario" placeholder="Ej: 30000">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Categoría</mat-label>
+    <mat-select formControlName="categoria">
+      <mat-option *ngFor="let cat of categorias" [value]="cat">
+        {{ cat.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <div class="botones">
     <button mat-raised-button color="primary" type="submit">

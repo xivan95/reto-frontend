@@ -23,15 +23,14 @@ export class VacantesService {
     return this.http.get<Vacante>(`${this.API_URL}/vacantes/${id}`);
   }
 
-  // ➕ Crear una nueva vacante (empresa)
   crearVacante(vacante: Vacante): Observable<Vacante> {
-    return this.http.post<Vacante>(`${this.API_URL}/empresa/vacantes`, vacante);
+    return this.http.post<Vacante>(`${this.API_URL}/vacantes`, vacante);
   }
 
   // 🗑️ Eliminar una vacante (o cancelarla si solo se desactiva)
   cancelarVacante(id: number): Observable<void> {
     return this.http.put<void>(
-      `${this.API_URL}/empresa/vacantes/${id}/cancelar`,
+      `${this.API_URL}/vacantes/${id}/cancelar`,
       {}
     );
   }
@@ -39,7 +38,7 @@ export class VacantesService {
   // 📝 Actualizar vacante
   actualizarVacante(vacante: Vacante): Observable<Vacante> {
     return this.http.put<Vacante>(
-      `${this.API_URL}/empresa/vacantes/${vacante.id}`,
+      `${this.API_URL}/vacantes/${vacante.idVacante}`,
       vacante
     );
   }
@@ -47,7 +46,7 @@ export class VacantesService {
   // 📥 Obtener solicitudes para una vacante (empresa)
   getSolicitudesByVacante(vacanteId: number): Observable<Solicitud[]> {
     return this.http.get<Solicitud[]>(
-      `${this.API_URL}/empresa/vacantes/${vacanteId}/solicitudes`
+      `${this.API_URL}/solicitudes/vacante/${vacanteId}`
     );
   }
 
@@ -63,9 +62,13 @@ export class VacantesService {
     comentario: string
   ): Observable<void> {
     return this.http.put<void>(
-      `${this.API_URL}/empresa/vacantes/${vacanteId}/solicitudes/${solicitudId}/asignar`,
+      `${this.API_URL}/vacantes/${vacanteId}/solicitudes/${solicitudId}/asignar`,
       { comentario }
     );
+  }
+
+  getMisVacantes() {
+    return this.http.get<Vacante[]>(`${this.API_URL}/vacantes/mis-vacantes`);
   }
 
   // ❌ Cancelar solicitud de usuario

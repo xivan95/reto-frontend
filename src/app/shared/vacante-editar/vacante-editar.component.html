@@ -1,34 +1,40 @@
 <h1>Editar Vacante</h1>
 
 <form [formGroup]="form" (ngSubmit)="guardarCambios()" class="vacante-form">
+
   <mat-form-field appearance="outline">
     <mat-label>Título</mat-label>
-    <input matInput formControlName="titulo" placeholder="Ej: Desarrollador Angular">
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Ubicación</mat-label>
-    <input matInput formControlName="ubicacion" placeholder="Ej: Madrid, España">
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Categoría</mat-label>
-    <input matInput formControlName="categoria" placeholder="Ej: Programación, Diseño, etc.">
+    <input matInput formControlName="nombre" placeholder="Ej: Desarrollador Angular">
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Descripción</mat-label>
-    <textarea matInput formControlName="descripcion" rows="4" placeholder="Detalles de la vacante..."></textarea>
+    <textarea matInput formControlName="descripcion" rows="4" placeholder="Resumen de la vacante..."></textarea>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Requisitos</mat-label>
-    <input matInput formControlName="requisitos" placeholder="Ej: Experiencia en Angular, RxJS">
+    <mat-label>Detalles</mat-label>
+    <textarea matInput formControlName="detalles" rows="3" placeholder="Detalles técnicos, herramientas, etc."></textarea>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Tipo de Contrato</mat-label>
-    <input matInput formControlName="tipoContrato" placeholder="Ej: Tiempo Completo, Freelance...">
+    <mat-label>Salario</mat-label>
+    <input matInput type="number" formControlName="salario" placeholder="Ej: 25000">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Estado</mat-label>
+    <mat-select formControlName="estatus">
+      <mat-option value="Abierta">Abierta</mat-option>
+      <mat-option value="Cerrada">Cerrada</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Categoría</mat-label>
+    <mat-select formControlName="categoria" [compareWith]="compararCategorias">
+      <mat-option *ngFor="let c of categorias" [value]="c">{{ c.nombre }}</mat-option>
+    </mat-select>
   </mat-form-field>
 
   <div class="botones">

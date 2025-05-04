@@ -8,11 +8,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component';
 import {
   EmpresasService,
-  Empresa,
 } from '../../../core/services/empresas.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { Usuario } from '../../../core/models/usuario.model';
+import { Empresa } from '../../../core/models/empresa.model';
 
 @Component({
   selector: 'app-gestionar-empresas',
@@ -26,24 +29,44 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
+    MatSelectModule,
   ],
   templateUrl: './gestionar-empresas.component.html',
   styleUrls: ['./gestionar-empresas.component.scss'],
 })
 export class GestionarEmpresasComponent implements OnInit {
-  displayedColumns: string[] = ['razonSocial', 'direccionFiscal', 'pais', 'acciones'];
+  displayedColumns: string[] = [
+    'razonSocial',
+    'direccionFiscal',
+    'pais',
+    'usuario',
+    'acciones',
+  ];
   mostrarFormulario = false;
   empresaEditando: Empresa | null = null;
-  nuevaEmpresa: Empresa = { idEmpresa: 0, razonSocial: '', direccionFiscal: '', pais: '' };
+  nuevaEmpresa: Empresa = {
+    idEmpresa: 0,
+    razonSocial: '',
+    direccionFiscal: '',
+    pais: '',
+    user: undefined,
+  };
   empresas: Empresa[] = [];
+  usuariosCompany: Usuario[] = [];
 
   constructor(
     private empresasService: EmpresasService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.cargarEmpresas();
+    this.cargarUsuariosCompany();
+  }
+
+  cargarEmpresas(): void {
     this.empresasService.getAll().subscribe({
       next: (empresas) => (this.empresas = empresas),
       error: () =>
@@ -53,8 +76,26 @@ export class GestionarEmpresasComponent implements OnInit {
     });
   }
 
+  cargarUsuariosCompany(): void {
+    this.authService.getAllUsuarios().subscribe({
+      next: (usuarios) => {
+        this.usuariosCompany = usuarios.filter((u) => u.role === 'COMPANY');
+      },
+      error: () => {
+        this.snackBar.open('Error al cargar usuarios.', 'Cerrar', {
+          duration: 3000,
+        });
+      },
+    });
+  }
+
   crearEmpresa(): void {
-    if (!this.nuevaEmpresa.razonSocial || !this.nuevaEmpresa.direccionFiscal || !this.nuevaEmpresa.pais) {
+    if (
+      !this.nuevaEmpresa.razonSocial ||
+      !this.nuevaEmpresa.direccionFiscal ||
+      !this.nuevaEmpresa.pais ||
+      !this.nuevaEmpresa.user?.id
+    ) {
       this.snackBar.open('Por favor, completa todos los campos.', 'Cerrar', {
         duration: 3000,
       });
@@ -129,7 +170,13 @@ export class GestionarEmpresasComponent implements OnInit {
   }
 
   private resetFormulario(): void {
-    this.nuevaEmpresa = { idEmpresa: 0, razonSocial: '', direccionFiscal: '' , pais: '' };
+    this.nuevaEmpresa = {
+      idEmpresa: 0,
+      razonSocial: '',
+      direccionFiscal: '',
+      pais: '',
+      user: undefined,
+    };
     this.empresaEditando = null;
     this.mostrarFormulario = false;
   }

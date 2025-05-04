@@ -7,6 +7,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DialogConfirmacionComponent } from '../../../shared/dialog-confirmacion/dialog-confirmacion.component';
 
 @Component({
   selector: 'app-vacantes',
@@ -18,6 +21,7 @@ import { MatCardModule } from '@angular/material/card';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatDialogModule,
   ],
   templateUrl: './vacantes.component.html',
   styleUrls: ['./vacantes.component.scss'],
@@ -25,17 +29,37 @@ import { MatCardModule } from '@angular/material/card';
 export class VacantesComponent implements OnInit {
   vacantes: Vacante[] = [];
 
-  constructor(private vacantesService: VacantesService) {}
+  constructor(
+    private vacantesService: VacantesService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.vacantesService.getVacantes().subscribe((vacantes) => {
-      this.vacantes = vacantes;
+    this.vacantesService.getMisVacantes().subscribe({
+      next: (vacantes) => (this.vacantes = vacantes),
+      error: () => {
+        this.snackBar.open('Error al cargar tus vacantes.', 'Cerrar', {
+          duration: 3000,
+        });
+      },
     });
   }
 
   cancelarVacante(id: number): void {
-    this.vacantesService.cancelarVacante(id).subscribe(() => {
-      this.vacantes = this.vacantes.filter((v) => v.id !== id);
+    const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
+      data: { mensaje: '¿Estás seguro de cancelar esta vacante?' },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmado) => {
+      if (confirmado) {
+        this.vacantesService.cancelarVacante(id).subscribe(() => {
+          this.vacantes = this.vacantes.filter((v) => v.idVacante !== id);
+          this.snackBar.open('Vacante cancelada.', 'Cerrar', {
+            duration: 3000,
+          });
+        });
+      }
     });
   }
 }

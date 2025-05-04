@@ -62,7 +62,7 @@ export class VacanteDetalleComponent implements OnInit {
     dialogRef.afterClosed().subscribe((comentario) => {
       if (comentario !== null && comentario.trim() !== '') {
         this.vacantesService
-          .asignarVacante(this.vacante!.id, solicitudId, comentario)
+          .asignarVacante(this.vacante!.idVacante, solicitudId, comentario)
           .subscribe(() => {
             this.snackBar.open(
               'Solicitud adjudicada con comentario.',
@@ -87,7 +87,7 @@ export class VacanteDetalleComponent implements OnInit {
     dialogRef.afterClosed().subscribe((comentario) => {
       if (comentario !== null && comentario.trim() !== '') {
         this.vacantesService
-          .cancelarSolicitud(this.vacante!.id, solicitudId, comentario)
+          .cancelarSolicitud(this.vacante!.idVacante, solicitudId, comentario)
           .subscribe(() => {
             this.snackBar.open(
               'Solicitud cancelada con comentario.',
@@ -108,11 +108,11 @@ export class VacanteDetalleComponent implements OnInit {
       return;
     }
 
-    this.vacantesService.getSolicitudesByVacante(this.vacante.id).subscribe({
+    this.vacantesService.getSolicitudesByVacante(this.vacante.idVacante).subscribe({
       next: (todas: Solicitud[]) => {
         this.solicitudes = todas.sort((a: Solicitud, b: Solicitud) => {
-          if (a.estado === 'pendiente' && b.estado !== 'pendiente') return -1;
-          if (a.estado !== 'pendiente' && b.estado === 'pendiente') return 1;
+          if (a.estado == 1 && b.estado != 1) return -1;
+          if (a.estado != 1 && b.estado == 1) return 1;
           return 0;
         });
       },

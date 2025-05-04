@@ -23,6 +23,15 @@
     <input matInput [(ngModel)]="nuevaEmpresa.pais">
   </mat-form-field>
 
+  <mat-form-field appearance="outline">
+    <mat-label>Usuario Responsable</mat-label>
+    <mat-select [(ngModel)]="nuevaEmpresa.user">
+      <mat-option *ngFor="let usuario of usuariosCompany" [value]="usuario">
+        {{ usuario.email }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <button mat-raised-button color="accent" (click)="crearEmpresa()">
     Guardar
   </button>
@@ -50,6 +59,12 @@
   <ng-container matColumnDef="pais">
     <th mat-header-cell *matHeaderCellDef> País </th>
     <td mat-cell *matCellDef="let empresa"> {{ empresa.pais }} </td>
+  </ng-container>
+
+    <!-- Usuario -->
+  <ng-container matColumnDef="usuario">
+    <th mat-header-cell *matHeaderCellDef> Usuario </th>
+    <td mat-cell *matCellDef="let empresa"> {{ empresa.user?.email || 'No asignado' }} </td>
   </ng-container>
 
   <!-- Acciones -->

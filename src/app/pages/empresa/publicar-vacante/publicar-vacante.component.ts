@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -11,7 +11,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+
 import { VacantesService } from '../../../core/services/vacantes.service';
+import { CategoriasService } from '../../../core/services/categorias.service';
+import { Categoria } from '../../../core/models/categoria.model';
+import { Vacante } from '../../../core/models/vacante.model';
 
 @Component({
   selector: 'app-publicar-vacante',
@@ -22,30 +27,46 @@ import { VacantesService } from '../../../core/services/vacantes.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
   ],
   templateUrl: './publicar-vacante.component.html',
   styleUrls: ['./publicar-vacante.component.scss'],
 })
-export class PublicarVacanteComponent {
+export class PublicarVacanteComponent implements OnInit {
   form: FormGroup;
+  categorias: Categoria[] = [];
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private router: Router,
-    private vacantesService: VacantesService
+    private vacantesService: VacantesService,
+    private categoriaService: CategoriasService
   ) {
-      this.form = this.fb.group({
-        titulo: ['', Validators.required],
-        ubicacion: ['', Validators.required],
-        categoria: ['', Validators.required],
-        descripcion: ['', Validators.required],
-        requisitos: ['', Validators.required], 
-        tipoContrato: ['', Validators.required], 
-      });
+    this.form = this.fb.group({
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      detalles: ['', Validators.required],
+      salario: [null, Validators.required],
+      estatus: ['Abierta', Validators.required],
+      categoria: [null, Validators.required],
+    });
   }
 
-  publicar() {
+  ngOnInit(): void {
+    this.categoriaService.getAll().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+      },
+      error: () => {
+        this.snackBar.open('Error al cargar categorías.', 'Cerrar', {
+          duration: 3000,
+        });
+      },
+    });
+  }
+
+  publicar(): void {
     if (this.form.invalid) {
       this.snackBar.open('Por favor, completa todos los campos.', 'Cerrar', {
         duration: 3000,
@@ -53,17 +74,24 @@ export class PublicarVacanteComponent {
       return;
     }
 
-    const nuevaVacante = this.form.value;
-    this.vacantesService.crearVacante(nuevaVacante);
+    const nuevaVacante: Vacante = this.form.value;
 
-    this.snackBar.open('Vacante publicada exitosamente.', 'Cerrar', {
-      duration: 3000,
+    this.vacantesService.crearVacante(nuevaVacante).subscribe({
+      next: () => {
+        this.snackBar.open('Vacante publicada exitosamente.', 'Cerrar', {
+          duration: 3000,
+        });
+        this.router.navigate(['/empresa/vacantes']);
+      },
+      error: () => {
+        this.snackBar.open('Error al publicar vacante.', 'Cerrar', {
+          duration: 3000,
+        });
+      },
     });
-
-    this.router.navigate(['/empresa/vacantes']);
   }
 
-  volver() {
+  volver(): void {
     this.router.navigate(['/empresa/vacantes']);
   }
 }

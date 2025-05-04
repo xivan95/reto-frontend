@@ -1,6 +1,9 @@
+import { Usuario } from './usuario.model';
+
 export interface Empresa {
-  id: number;
-  nombreComercial: string;
-  email: string;
-  role: 'empresa';
+  idEmpresa: number;
+  razonSocial: string;
+  direccionFiscal: string;
+  pais: string;
+  user?: Usuario; 
 }
