@@ -30,14 +30,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) {
-      //this.authService.logout(); // limpia por si acaso
       this.router.navigate(['/auth/login']);
     } else {
-      // Si ya estás logueado, redirige según el rol
       const role = this.authService.getRole();
       const currentUrl = this.router.url;
 
-      // Solo redirige si estás en la raíz o en /auth/login
       if (currentUrl === '/' || currentUrl.startsWith('/auth/login')) {
         switch (role) {
           case 'ADMIN':

@@ -15,9 +15,8 @@ export class AuthService {
   private readonly CURRENT_USER_KEY = 'current_user';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
 
-  // private readonly API_URL = 'https://retodam-production.up.railway.app/api/auth';
   private readonly API_URL =
-    'https://retodam-production.up.railway.app/api/auth'; // Cambia esto a tu URL de API real
+    'https://retodam-production.up.railway.app/api/auth';
 
   constructor(private router: Router, private http: HttpClient) {}
 

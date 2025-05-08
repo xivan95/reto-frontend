@@ -1,6 +1,5 @@
 import { Categoria } from './categoria.model';
 import { Empresa } from './empresa.model';
-import { Solicitud } from './solicitud.model';
 
 export interface Vacante {
   idVacante: number;
