@@ -1,8 +1,33 @@
 .app-title {
+  font-size: 20px;
   font-weight: bold;
-  font-size: 1.2rem;
 }
 
 .spacer {
   flex: 1 1 auto;
+}
+
+mat-toolbar {
+  display: flex;
+  align-items: center;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.menu-button {
+  display: none;
+}
+
+/* Responsive: ocultar botones grandes y mostrar menú hamburguesa en móviles */
+@media (max-width: 768px) {
+  .nav-buttons {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+  }
 }

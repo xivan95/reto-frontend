@@ -72,7 +72,6 @@ export class LoginComponent {
 
         this.snackBar.open('¡Bienvenido!', 'Cerrar', { duration: 3000 });
 
-        // Redirigir según el rol
         switch (response.user.role) {
           case 'ADMIN':
             this.router.navigate(['/admin/gestionar-usuarios']);

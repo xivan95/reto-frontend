@@ -20,7 +20,6 @@ export class AuthService {
 
   constructor(private router: Router, private http: HttpClient) {}
 
-  // 🔐 Llamada a login en backend
   loginBackend(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, {
       email,
@@ -28,7 +27,6 @@ export class AuthService {
     });
   }
 
-  // 💾 Guardar datos en localStorage
   saveLoginData(response: LoginResponse) {
     localStorage.setItem(this.TOKEN_KEY, response.accessToken);
     localStorage.setItem(this.REFRESH_TOKEN_KEY, response.refreshToken);
@@ -42,7 +40,7 @@ export class AuthService {
 
   registerUser(user: Usuario) {
     return this.http.post(`${this.API_URL}/signup`, user, {
-      responseType: 'text', // porque el backend devuelve solo un String
+      responseType: 'text',
     });
   }
 
@@ -101,9 +99,6 @@ export class AuthService {
   }
 
   getAllUsuarios(): Observable<Usuario[]> {
-    // return this.http.get<Usuario[]>(
-    //   'https://retodam-production.up.railway.app/api/user'
-    // );
     return this.http.get<Usuario[]>(
       'https://retodam-production.up.railway.app/api/user'
     );

@@ -3,6 +3,8 @@ import { RouterOutlet, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from './core/services/auth.service';
 import { Router } from '@angular/router';
 
@@ -15,6 +17,8 @@ import { Router } from '@angular/router';
     RouterModule,
     MatToolbarModule,
     MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

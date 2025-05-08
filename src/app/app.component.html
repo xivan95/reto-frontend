@@ -3,23 +3,74 @@
   <span class="spacer"></span>
 
   <ng-container *ngIf="authService.isLoggedIn()">
-    <button *ngIf="authService.getRole() === 'COMPANY'" mat-button routerLink="/empresa/vacantes">
-      Mis Vacantes
-    </button>
+    <div class="nav-buttons">
+      <button
+        *ngIf="authService.getRole() === 'COMPANY'"
+        mat-button
+        routerLink="/empresa/vacantes"
+      >
+        Mis Vacantes
+      </button>
+      <button
+        *ngIf="authService.getRole() === 'ADMIN'"
+        mat-button
+        routerLink="/admin/gestionar-usuarios"
+      >
+        Gestionar Usuarios
+      </button>
+      <button
+        *ngIf="authService.getRole() === 'ADMIN'"
+        mat-button
+        routerLink="/admin/gestionar-empresas"
+      >
+        Gestionar Empresas
+      </button>
+      <button
+        *ngIf="authService.getRole() === 'ADMIN'"
+        mat-button
+        routerLink="/admin/gestionar-categorias"
+      >
+        Gestionar Categorías
+      </button>
+      <button mat-button (click)="logout()">Logout</button>
+    </div>
 
-    <button *ngIf="authService.getRole() === 'ADMIN'" mat-button routerLink="/admin/gestionar-usuarios">
-      Gestionar Usuarios
-    </button>
-
-    <button *ngIf="authService.getRole() === 'ADMIN'" mat-button routerLink="/admin/gestionar-empresas">
-      Gestionar Empresas
-    </button>
-
-    <button *ngIf="authService.getRole() === 'ADMIN'" mat-button routerLink="/admin/gestionar-categorias">
-      Gestionar Categorías
-    </button>
-
-    <button mat-button (click)="logout()">Logout</button>
+    <div class="menu-button">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button
+          *ngIf="authService.getRole() === 'COMPANY'"
+          mat-menu-item
+          routerLink="/empresa/vacantes"
+        >
+          Mis Vacantes
+        </button>
+        <button
+          *ngIf="authService.getRole() === 'ADMIN'"
+          mat-menu-item
+          routerLink="/admin/gestionar-usuarios"
+        >
+          Gestionar Usuarios
+        </button>
+        <button
+          *ngIf="authService.getRole() === 'ADMIN'"
+          mat-menu-item
+          routerLink="/admin/gestionar-empresas"
+        >
+          Gestionar Empresas
+        </button>
+        <button
+          *ngIf="authService.getRole() === 'ADMIN'"
+          mat-menu-item
+          routerLink="/admin/gestionar-categorias"
+        >
+          Gestionar Categorías
+        </button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </div>
   </ng-container>
 </mat-toolbar>
 

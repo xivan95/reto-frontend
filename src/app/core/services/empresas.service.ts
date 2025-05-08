@@ -7,9 +7,8 @@ import { Empresa } from '../models/empresa.model';
   providedIn: 'root',
 })
 export class EmpresasService {
-  //private readonly API_URL = 'https://retodam-production.up.railway.app/api/empresas';
   private readonly API_URL =
-    'https://retodam-production.up.railway.app/api/empresas'; // Cambia esto a tu URL de API real
+    'https://retodam-production.up.railway.app/api/empresas';
 
   constructor(private http: HttpClient) {}
 
