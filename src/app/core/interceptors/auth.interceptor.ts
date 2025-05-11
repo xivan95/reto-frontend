@@ -38,12 +38,9 @@ export const authInterceptor: HttpInterceptorFn = (
         }
 
         return http
-          .post<any>(
-            'https://retodam-production.up.railway.app/api/auth/refresh-token',
-            {
-              refreshToken,
-            }
-          )
+          .post<any>('https://retodam.onrender.com/api/auth/refresh-token', {
+            refreshToken,
+          })
           .pipe(
             switchMap((res) => {
               authService.saveLoginData(res);

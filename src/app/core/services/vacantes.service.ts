@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class VacantesService {
-  //private readonly API_URL = 'https://retodam-production.up.railway.app/api';
-  private readonly API_URL = 'https://retodam-production.up.railway.app/api'; // Cambia esto a tu URL de API real
+  //private readonly API_URL = 'https://retodam.onrender.com/api';
+  private readonly API_URL = 'https://retodam.onrender.com/api'; // Cambia esto a tu URL de API real
 
   constructor(private http: HttpClient) {}
 

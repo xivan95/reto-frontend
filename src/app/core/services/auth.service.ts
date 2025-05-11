@@ -15,8 +15,7 @@ export class AuthService {
   private readonly CURRENT_USER_KEY = 'current_user';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
 
-  private readonly API_URL =
-    'https://retodam-production.up.railway.app/api/auth';
+  private readonly API_URL = 'https://retodam.onrender.com/api/auth';
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -80,14 +79,14 @@ export class AuthService {
   updateUsuario(usuario: Usuario): Observable<Usuario> {
     const { authorities, ...sinAuthorities } = usuario as any;
     return this.http.put<Usuario>(
-      'https://retodam-production.up.railway.app/api/user/update',
+      'https://retodam.onrender.com/api/user/update',
       sinAuthorities
     );
   }
 
   deleteUsuario(id: number): Observable<void> {
     return this.http.delete<void>(
-      `https://retodam-production.up.railway.app/api/user/${id}`
+      `https://retodam.onrender.com/api/user/${id}`
     );
   }
 
@@ -102,10 +101,8 @@ export class AuthService {
 
   getAllUsuarios(): Observable<Usuario[]> {
     // return this.http.get<Usuario[]>(
-    //   'https://retodam-production.up.railway.app/api/user'
+    //   'https://retodam.onrender.com/api/user'
     // );
-    return this.http.get<Usuario[]>(
-      'https://retodam-production.up.railway.app/api/user'
-    );
+    return this.http.get<Usuario[]>('https://retodam.onrender.com/api/user');
   }
 }
